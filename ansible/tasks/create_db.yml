@@ -1,0 +1,21 @@
+- name: create db container
+  containers.podman.podman_container:
+    name: rss_json
+    state: present
+    image: postgres:alpine
+    ports:
+      - "5432:5432"
+    env:
+      POSTGRES_DB: "rss_json"
+      POSTGRES_PASSWORD: "{{db_password}}"
+
+# - name: Wait for the target node to be ready to be joined
+#   shell: "{{postgres_install_dir}}/bin/psql '{{bdr_join_target_dsn}}' -qAtw 'SELECT bdr.bdr_node_join_wait_for_ready();'"
+
+- name: "Load SQL script into a variable"
+  set_fact:
+    sql_script: "{{lookup('template', '../pg-scripts/2021-06-13_create_db.sql') }}"
+
+- name: "Execute script from variable"
+  command: "/usr/bin/psql postgresql://postgres:{{db_password}}@localhost:5432/rss_json -c \"{{ sql_script }}\""
+    # register: sql_response_variable
