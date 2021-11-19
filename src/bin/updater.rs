@@ -1,6 +1,7 @@
 extern crate rss_json_service;
-use anyhow::Result;
+use anyhow::{Context, Result};
 use hyper::Client as HttpClient;
+use hyper::client::HttpConnector;
 use hyper_tls::HttpsConnector;
 use log::{error, info};
 use rss_feed::RssFeed;
@@ -29,11 +30,24 @@ async fn main() -> Result<()> {
 }
 
 async fn process_feed(db_feed: Feed, repo: &Repo) -> Result<()> {
-    let https = HttpsConnector::new();
-    let http_client = HttpClient::builder().build::<_, hyper::Body>(https);
+    let uri: hyper::Uri = db_feed.url.parse()?;
+    let res = match uri.scheme_str() {
+        Some(s) => {
+            match s {
+                "http" => 
+                    HttpClient::builder().build::<_, hyper::Body>(HttpConnector::new()).get(uri).await.context("request failed"),
+                "https" => 
+                    HttpClient::builder().build::<_, hyper::Body>(HttpsConnector::new()).get(uri).await.context("request failed"),
+                _ => Err(anyhow::anyhow!("no connector available for scheme \"{}\"", s))
+            }
+        },
+        None => Err(anyhow::anyhow!("scheme not recognized"))
+    }?;
+
+    // let http_client = HttpClient::builder().build::<_, hyper::Body>(http_connector);
     // TODO: determine whether the url is http or https and choose the client accordingly
     // let client = HttpClient::new();
-    let res = http_client.get(db_feed.url.parse()?).await?;
+    // let res = http_client.get(uri).await?;
     // TODO: If the feed moved permanently, update the feed url
 
     // Concatenate the body stream into a single buffer...
