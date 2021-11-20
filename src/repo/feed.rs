@@ -3,6 +3,7 @@ use std::convert::TryFrom;
 use tokio_postgres::Row;
 use uuid::Uuid;
 
+#[derive(Clone)]
 pub struct Feed {
     pub id: Uuid,
     pub url: String,

@@ -1,15 +1,13 @@
 extern crate rss_json_service;
-use anyhow::{Context, Result};
-use hyper::Client as HttpClient;
-use hyper::client::HttpConnector;
-use hyper_tls::HttpsConnector;
+use anyhow::Result;
 use log::{error, info};
 use rss_feed::RssFeed;
-use rss_json_service::repo::feed::Feed;
-use rss_json_service::repo::Repo;
-use rss_json_service::rss_feed;
+use rss_json_service::{fetcher::*, repo::feed::Feed, repo::Repo, rss_feed};
 use std::convert::TryFrom;
 use std::{env, str};
+use tokio::time::Duration;
+
+const TIMEOUT: Duration = Duration::from_secs(3);
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -30,49 +28,47 @@ async fn main() -> Result<()> {
 }
 
 async fn process_feed(db_feed: Feed, repo: &Repo) -> Result<()> {
-    let uri: hyper::Uri = db_feed.url.parse()?;
-    let res = match uri.scheme_str() {
-        Some(s) => {
-            match s {
-                "http" => 
-                    HttpClient::builder().build::<_, hyper::Body>(HttpConnector::new()).get(uri).await.context("request failed"),
-                "https" => 
-                    HttpClient::builder().build::<_, hyper::Body>(HttpsConnector::new()).get(uri).await.context("request failed"),
-                _ => Err(anyhow::anyhow!("no connector available for scheme \"{}\"", s))
-            }
-        },
-        None => Err(anyhow::anyhow!("scheme not recognized"))
-    }?;
+    let res = request(&db_feed.url, &TIMEOUT).await?;
 
-    // let http_client = HttpClient::builder().build::<_, hyper::Body>(http_connector);
-    // TODO: determine whether the url is http or https and choose the client accordingly
-    // let client = HttpClient::new();
-    // let res = http_client.get(uri).await?;
-    // TODO: If the feed moved permanently, update the feed url
+    if let Some(new_url) = &res.1 {
+        let mut updated_feed = db_feed.clone();
+
+        updated_feed.url = new_url.clone();
+
+        repo.update_feed(&updated_feed).await?;
+    }
 
     // Concatenate the body stream into a single buffer...
-    let buf = hyper::body::to_bytes(res).await?;
+    let buf = hyper::body::to_bytes(res.0).await?;
     let rss_feed = RssFeed::try_from(str::from_utf8(&buf)?)?;
 
     for rss_channel in &rss_feed.channels {
-        let db_channel;
-
-        match repo
+        let db_channel = match repo
             .get_channel_by_title_feed_id(&*rss_channel.title, &db_feed.id)
             .await?
         {
-            Some(c) => db_channel = repo.update_channel(&c).await?,
-            None => {
-                db_channel = repo
-                    .create_channel(
-                        &*rss_channel.title,
-                        &*rss_channel.description,
-                        &rss_channel.image,
-                        &db_feed.id,
-                    )
-                    .await?
+            Some(mut c) => {
+                let description = rss_channel.description.clone();
+                let image = rss_channel.image.clone();
+
+                if c.needs_update(&description, &image) {
+                    c.description = description;
+                    c.image = image;
+                    repo.update_channel(&c).await?
+                } else {
+                    c
+                }
             }
-        }
+            None => {
+                repo.create_channel(
+                    &*rss_channel.title,
+                    &*rss_channel.description,
+                    &rss_channel.image,
+                    &db_feed.id,
+                )
+                .await?
+            }
+        };
 
         for rss_item in &rss_channel.items {
             match repo
@@ -80,6 +76,7 @@ async fn process_feed(db_feed: Feed, repo: &Repo) -> Result<()> {
                 .await?
             {
                 Some(i) => {
+                    todo!("implement update");
                     repo.update_item(&i).await?;
                 }
                 None => {

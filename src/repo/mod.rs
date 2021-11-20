@@ -42,6 +42,21 @@ impl Repo {
         Ok(res)
     }
 
+    pub async fn update_feed(&self, feed: &Feed) -> Result<Feed> {
+        let rows = self
+            .client
+            .query(
+                "UPDATE feeds SET url=$1 WHERE id=$2 RETURNING *",
+                &[&feed.url, &feed.id],
+            )
+            .await?;
+
+        match rows.len() {
+            1 => Ok(Feed::try_from(&rows[0])?),
+            _ => Err(anyhow::Error::msg("error updating feed")),
+        }
+    }
+
     pub async fn get_channel_by_title_feed_id(
         &self,
         title: &str,
