@@ -15,6 +15,16 @@ pub struct Item {
     pub channel_id: Uuid,
 }
 
+impl Item {
+    pub fn needs_update(&self, enclosure_type: &String, enclosure_url: &String) -> bool {
+        if &self.enclosure_type == enclosure_type && &self.enclosure_url == enclosure_url {
+            false
+        } else {
+            true
+        }
+    }
+}
+
 impl TryFrom<&Row> for Item {
     type Error = anyhow::Error;
 

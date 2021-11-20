@@ -75,9 +75,16 @@ async fn process_feed(db_feed: Feed, repo: &Repo) -> Result<()> {
                 .get_item_by_title_date_channel_id(&*rss_item.title, &rss_item.date, &db_channel.id)
                 .await?
             {
-                Some(i) => {
-                    todo!("implement update");
-                    repo.update_item(&i).await?;
+                Some(mut i) => {
+                    let enclosure_type = rss_item.enclosure.mime_type.clone();
+                    let enclosure_url = rss_item.enclosure.url.clone();
+
+                    if i.needs_update(&enclosure_type, &enclosure_url) {
+                        i.enclosure_type = enclosure_type;
+                        i.enclosure_url = enclosure_url;
+
+                        repo.update_item(&i).await?;
+                    }
                 }
                 None => {
                     repo.create_item(
