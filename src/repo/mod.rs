@@ -71,8 +71,18 @@ impl Repo {
         }
     }
 
-    pub async fn get_all_channels(&self) -> Result<Vec<Channel>> {
-        let rows = self.client.query("SELECT * FROM channels", &[]).await?;
+    pub async fn get_all_channels(
+        &self,
+        since: Option<DateTime<FixedOffset>>,
+    ) -> Result<Vec<Channel>> {
+        let rows = match since {
+            Some(s) => {
+                self.client
+                    .query("SELECT * FROM channels WHERE update_ts > $1", &[&s])
+                    .await?
+            }
+            None => self.client.query("SELECT * FROM channels", &[]).await?,
+        };
         let mut res = Vec::<Channel>::new();
 
         for row in rows {

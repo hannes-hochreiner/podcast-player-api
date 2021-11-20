@@ -1,6 +1,8 @@
 #[macro_use]
 extern crate rocket;
 extern crate rss_json_service;
+use anyhow::Context;
+use chrono::{DateTime, FixedOffset};
 use hyper::{body::Bytes, body::HttpBody as _, header::ToStrError, http::uri::InvalidUri};
 use log::error;
 use rocket::{
@@ -22,11 +24,21 @@ fn index() -> &'static str {
     "Hello, world!"
 }
 
-#[get("/channels")]
-async fn channels(repo: &State<Repo>) -> Result<Json<Vec<Channel>>, CustomError> {
-    let channels = repo.get_all_channels().await?;
-
-    Ok(Json(channels))
+#[get("/channels?<since>")]
+async fn channels(
+    repo: &State<Repo>,
+    since: Option<String>,
+) -> Result<Json<Vec<Channel>>, CustomError> {
+    match since {
+        Some(s) => Ok(Json(
+            repo.get_all_channels(Some(
+                DateTime::parse_from_rfc3339(&s)
+                    .context(format!("could not parse filter date \"{}\"", s))?,
+            ))
+            .await?,
+        )),
+        None => Ok(Json(repo.get_all_channels(None).await?)),
+    }
 }
 
 #[get("/channels/<channel_id>/items")]
