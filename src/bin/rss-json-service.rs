@@ -1,19 +1,21 @@
 #[macro_use]
 extern crate rocket;
 extern crate rss_json_service;
-use hyper::{
-    body::Bytes, body::HttpBody as _, header::ToStrError, http::uri::InvalidUri,
-    Client as HttpClient, StatusCode,
-};
-use hyper_tls::HttpsConnector;
+use hyper::{body::Bytes, body::HttpBody as _, header::ToStrError, http::uri::InvalidUri};
 use log::error;
 use rocket::{
     http::Status, response, response::stream::ByteStream, response::Responder, serde::json::Json,
     Request, State,
 };
-use rss_json_service::repo::{channel::Channel, item::Item, Repo};
+use rss_json_service::{
+    fetcher,
+    repo::{channel::Channel, item::Item, Repo},
+};
 use std::{env, str};
+use tokio::time::Duration;
 use uuid::Uuid;
+
+const TIMEOUT: Duration = Duration::from_secs(3);
 
 #[get("/")]
 fn index() -> &'static str {
@@ -41,22 +43,11 @@ async fn channel_items(
 async fn item_stream(repo: &State<Repo>, item_id: &str) -> Result<ByteStream![Bytes], CustomError> {
     let item_id = Uuid::parse_str(item_id)?;
     let item = repo.get_item_by_id(&item_id).await?;
-    let https = HttpsConnector::new();
-    let http_client = HttpClient::builder().build::<_, hyper::Body>(https);
-    let mut res = http_client.get(item.enclosure_url.parse()?).await.unwrap();
 
-    match res.status() {
-        StatusCode::FOUND
-        | StatusCode::MOVED_PERMANENTLY
-        | StatusCode::TEMPORARY_REDIRECT
-        | StatusCode::PERMANENT_REDIRECT => {
-            res = http_client
-                .get(res.headers()["location"].to_str()?.parse()?)
-                .await?;
-        }
-        StatusCode::OK => {}
-        _ => {}
-    }
+    let mut res = fetcher::request(&item.enclosure_url, &TIMEOUT)
+        .await
+        .unwrap()
+        .0;
 
     Ok(ByteStream! {
         while let Some(next) = res.data().await {
