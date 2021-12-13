@@ -13,7 +13,7 @@ jobs:
         run: cargo test --verbose
   publish:
     name: Publish to Docker
-    needs: release
+    needs: test
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repo
