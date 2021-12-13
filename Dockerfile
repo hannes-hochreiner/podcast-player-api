@@ -12,6 +12,5 @@ CMD ["/opt/rss-json-service"]
 
 FROM debian:stable-slim AS worker
 MAINTAINER Hannes Hochreiner <hannes@hochreiner.net>
-RUN apt update && apt install openssl ca-certificates -y
 COPY --from=builder /opt/rss-json-service/target/release/updater /opt/updater
 CMD ["/opt/updater"]
