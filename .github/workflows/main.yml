@@ -11,25 +11,16 @@ jobs:
         run: cargo build --verbose
       - name: Run tests
         run: cargo test --verbose
-  # publish:
-  #   name: Publish to Docker
-  #   needs: test
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Checkout repo
-  #     uses: actions/checkout@v2
-  #   - name: Create and publish to Docker Hub
-  #     uses: hannes-hochreiner/gha-publish-on-docker-hub@v1.4.1
-  #     with:
-  #       docker-user-name: ${{ secrets.DOCKER_USER }}
-  #       docker-token: ${{ secrets.DOCKER_TOKEN }}
-  #     id: publish
-  #   - name: Call container updater
-  #     uses: hannes-hochreiner/gha-authorized-request@v1.0.0
-  #     with:
-  #       auth0-domain: ${{ secrets.AUTH0_DOMAIN }}
-  #       auth0-client-id: ${{ secrets.AUTH0_CLIENT_ID }}
-  #       auth0-client-secret: ${{ secrets.AUTH0_CLIENT_SECRET }}
-  #       auth0-audience: ${{ secrets.AUTH0_AUDIENCE }}
-  #       data: ${{ steps.publish.outputs.images }}
-  #       url: ${{ secrets.UPDATER_URL }}
+  publish:
+    name: Publish to Docker
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+    - name: Create and publish to Docker Hub
+      uses: hannes-hochreiner/gha-publish-on-docker-hub@v1.5.0
+      with:
+        docker-user-name: ${{ secrets.DOCKER_USER }}
+        docker-token: ${{ secrets.DOCKER_TOKEN }}
+        docker-targets: rss-json-service, updater

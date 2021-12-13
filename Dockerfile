@@ -1,10 +1,17 @@
-FROM node:10.16.2-alpine
-MAINTAINER Hannes Hochreiner <hannes@hochreiner.net>
-RUN apk add make gcc g++ python2
+FROM rust:slim AS builder
+RUN apt update && apt install librust-openssl-dev -y
 RUN mkdir -p /opt/rss-json-service
 COPY src /opt/rss-json-service/src
-COPY package*.json /opt/rss-json-service/
-RUN cd /opt/rss-json-service && npm install && npm run build
-RUN apk del make gcc g++ python2
-EXPOSE 8888
-CMD ["node", "/opt/rss-json-service/bld/main"]
+COPY Cargo.* /opt/rss-json-service/
+RUN cd /opt/rss-json-service && cargo build --release
+
+FROM debian:stable-slim AS updater
+MAINTAINER Hannes Hochreiner <hannes@hochreiner.net>
+COPY --from=builder /opt/rss-json-service/target/release/rss-json-service /opt/rss-json-service
+CMD ["/opt/rss-json-service"]
+
+FROM debian:stable-slim AS worker
+MAINTAINER Hannes Hochreiner <hannes@hochreiner.net>
+RUN apt update && apt install openssl ca-certificates -y
+COPY --from=builder /opt/rss-json-service/target/release/updater /opt/updater
+CMD ["/opt/updater"]
