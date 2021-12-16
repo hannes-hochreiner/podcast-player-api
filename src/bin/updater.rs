@@ -5,7 +5,7 @@ use rss_feed::RssFeed;
 use rss_json_service::{fetcher::*, repo::feed::Feed, repo::Repo, rss_feed};
 use std::convert::TryFrom;
 use std::{env, str};
-use tokio::time::Duration;
+use tokio::time::{sleep, Duration};
 
 const TIMEOUT: Duration = Duration::from_secs(3);
 
@@ -13,21 +13,24 @@ const TIMEOUT: Duration = Duration::from_secs(3);
 async fn main() -> Result<()> {
     env_logger::init();
     let repo = Repo::new(&*env::var("UPDATER_CONNECTION")?).await?;
-    let feeds = repo.get_feeds().await?;
 
-    for db_feed in feeds {
-        let feed_url = db_feed.url.clone();
+    loop {
+        let feeds = repo.get_feeds().await?;
 
-        match process_feed(db_feed, &repo).await {
-            Ok(_) => info!("successfully parsed \"{}\"", feed_url),
-            Err(e) => error!("error parsing \"{}\": {}", feed_url, e),
+        for db_feed in feeds {
+            let feed_url = db_feed.url.clone();
+
+            match process_feed(&db_feed, &repo).await {
+                Ok(_) => info!("successfully parsed \"{}\"", feed_url),
+                Err(e) => error!("error parsing \"{}\": {}", feed_url, e),
+            }
         }
-    }
 
-    Ok(())
+        sleep(Duration::from_secs(60 * 60)).await;
+    }
 }
 
-async fn process_feed(db_feed: Feed, repo: &Repo) -> Result<()> {
+async fn process_feed(db_feed: &Feed, repo: &Repo) -> Result<()> {
     let res = request(&db_feed.url, &TIMEOUT).await?;
 
     if let Some(new_url) = &res.1 {
