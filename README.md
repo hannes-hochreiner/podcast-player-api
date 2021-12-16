@@ -72,7 +72,7 @@ TEST_INSERTER_CONNECTION=postgresql://<test inserter db user>:<test inserter pas
 
 ### rss-json-service
 
-The rss-json-service expects two environment variables providing the database credentials.
+The rss-json-service expects an environment variables providing the database credentials.
 
 ```bash
 RSS_JSON_CONNECTION=postgresql://<rss-json db user>:<rss-json password>@<host>:5432/rss_json cargo run --bin rss-json-service
@@ -81,7 +81,17 @@ RSS_JSON_CONNECTION=postgresql://<rss-json db user>:<rss-json password>@<host>:5
 ### updater
 
 The updater tries to obtain the connection string for the database from the environment variable `UPDATER_CONNECTION`.
+Alternatively, the connection string can be provided in a configuration file.
+The path of the configuration file needs to be provided in an environment variable.
+In both cases, the environment variable `RUST_LOG` can be used to set the logging level.
 
 ```bash
 UPDATER_CONNECTION=postgresql://<updater db user>:<updater password>@<host>:5432/rss_json cargo run --bin updater
+RUST_LOG=info UPDATER_CONFIG_FILE=config.json cargo run --bin updater
+```
+
+```json
+{
+    "db_connection": "postgresql://<updater db user>:<updater password>@<host>:5432/rss_json"
+}
 ```

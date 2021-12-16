@@ -2,17 +2,38 @@ extern crate rss_json_service;
 use anyhow::Result;
 use log::{error, info};
 use rss_feed::RssFeed;
-use rss_json_service::{fetcher::*, repo::feed::Feed, repo::Repo, rss_feed};
+use rss_json_service::{fetcher::*, repo::feed::Feed, repo::Repo, rss_feed, types};
 use std::convert::TryFrom;
 use std::{env, str};
-use tokio::time::{sleep, Duration};
+use tokio::{
+    fs,
+    time::{sleep, Duration},
+};
 
 const TIMEOUT: Duration = Duration::from_secs(3);
 
 #[tokio::main]
 async fn main() -> Result<()> {
     env_logger::init();
-    let repo = Repo::new(&*env::var("UPDATER_CONNECTION")?).await?;
+
+    let connection = match (
+        env::var("UPDATER_CONNECTION"),
+        env::var("UPDATER_CONFIG_FILE"),
+    ) {
+        (Ok(conn), _) => Ok(conn),
+        (_, Ok(file)) => {
+            let config: types::updater_config::UpdaterConfig =
+                serde_json::from_str(&fs::read_to_string(file).await?)?;
+
+            Ok(config.db_connection)
+        }
+        (_, _) => {
+            error!("error reading configuration");
+            Err(anyhow::anyhow!("error reading configuration"))
+        }
+    }?;
+
+    let repo = Repo::new(&connection).await?;
 
     loop {
         let feeds = repo.get_feeds().await?;
