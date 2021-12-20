@@ -1,11 +1,10 @@
 FROM fedora:34 AS builder
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-RUN source $HOME/.cargo/env
 RUN dnf install gcc openssl-devel -y
 RUN mkdir -p /opt/rss-json-service
 COPY src /opt/rss-json-service/src
 COPY Cargo.* /opt/rss-json-service/
-RUN cd /opt/rss-json-service && cargo build --release
+RUN source $HOME/.cargo/env && cd /opt/rss-json-service && cargo build --release
 
 FROM fedora:34 AS rss-json-service
 MAINTAINER Hannes Hochreiner <hannes@hochreiner.net>
