@@ -12,9 +12,10 @@ use rocket::{
 use rss_json_service::{
     fetcher,
     repo::{channel::Channel, item::Item, Repo},
+    types::service_config,
 };
 use std::{env, str};
-use tokio::time::Duration;
+use tokio::{fs, time::Duration};
 use uuid::Uuid;
 
 const TIMEOUT: Duration = Duration::from_secs(3);
@@ -67,9 +68,26 @@ async fn item_stream(repo: &State<Repo>, item_id: &str) -> Result<ByteStream![By
 #[launch]
 async fn rocket() -> _ {
     env_logger::init();
-    let repo = Repo::new(&*env::var("RSS_JSON_CONNECTION").unwrap())
-        .await
-        .unwrap();
+
+    let connection = match (
+        env::var("RSS_JSON_SERVICE_CONNECTION"),
+        env::var("RSS_JSON_SERVICE_CONFIG_FILE"),
+    ) {
+        (Ok(conn), _) => Ok(conn),
+        (_, Ok(file)) => {
+            let config: service_config::ServiceConfig =
+                serde_json::from_str(&fs::read_to_string(file).await.unwrap()).unwrap();
+
+            Ok(config.db_connection)
+        }
+        (_, _) => {
+            error!("error reading configuration");
+            Err(anyhow::anyhow!("error reading configuration"))
+        }
+    }
+    .unwrap();
+
+    let repo = Repo::new(&connection).await.unwrap();
 
     rocket::build()
         .manage(repo)
