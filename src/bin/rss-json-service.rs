@@ -19,11 +19,6 @@ use uuid::Uuid;
 
 const TIMEOUT: Duration = Duration::from_secs(3);
 
-#[get("/")]
-fn index() -> &'static str {
-    "Hello, world!"
-}
-
 #[get("/channels?<since>")]
 async fn channels(
     repo: &State<Repo>,
@@ -78,7 +73,7 @@ async fn rocket() -> _ {
 
     rocket::build()
         .manage(repo)
-        .mount("/", routes![index, channels, channel_items, item_stream])
+        .mount("/", routes![channels, channel_items, item_stream])
 }
 
 struct CustomError {
