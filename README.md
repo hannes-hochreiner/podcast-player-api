@@ -1,4 +1,4 @@
-![CI](https://github.com/hannes-hochreiner/rss-json-service/workflows/CI/badge.svg)
+[![CI](https://github.com/hannes-hochreiner/rss-json-service/actions/workflows/main.yml/badge.svg)](https://github.com/hannes-hochreiner/rss-json-service/actions/workflows/main.yml)
 # rss-json-service
 A simple RSS to JSON web service.
 
