@@ -35,10 +35,10 @@ impl Repo {
         match update_ts.as_ref() {
             Some(update) => {
                 self.client
-                    .query("SELECT id, url FROM feeds WHERE update_ts >= $1", &[update])
+                    .query("SELECT * FROM feeds WHERE update_ts >= $1", &[update])
                     .await?
             }
-            None => self.client.query("SELECT id, url FROM feeds", &[]).await?,
+            None => self.client.query("SELECT * FROM feeds", &[]).await?,
         }
         .iter()
         .map(Feed::try_from)
@@ -80,7 +80,13 @@ impl Repo {
         title: &str,
         feed_id: &Uuid,
     ) -> Result<Option<Channel>> {
-        let rows = self.client.query("SELECT id, title, description, image, feed_id FROM channels WHERE title=$1 AND feed_id=$2", &[&title, feed_id]).await?;
+        let rows = self
+            .client
+            .query(
+                "SELECT * FROM channels WHERE title=$1 AND feed_id=$2",
+                &[&title, feed_id],
+            )
+            .await?;
 
         match rows.len() {
             0 => Ok(None),
