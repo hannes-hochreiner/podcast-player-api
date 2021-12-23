@@ -30,18 +30,33 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE TRIGGER insert_timestamp_items
+BEFORE INSERT ON items
+FOR EACH ROW 
+EXECUTE PROCEDURE set_update_timestamp();
+
 CREATE TRIGGER update_timestamp_items
-BEFORE INSERT, UPDATE ON items
+BEFORE UPDATE ON items
+FOR EACH ROW 
+EXECUTE PROCEDURE set_update_timestamp();
+
+CREATE TRIGGER insert_timestamp_channels
+BEFORE INSERT ON channels
 FOR EACH ROW 
 EXECUTE PROCEDURE set_update_timestamp();
 
 CREATE TRIGGER update_timestamp_channels
-BEFORE INSERT, UPDATE ON channels
+BEFORE UPDATE ON channels
+FOR EACH ROW 
+EXECUTE PROCEDURE set_update_timestamp();
+
+CREATE TRIGGER insert_timestamp_feeds
+BEFORE INSERT ON feeds
 FOR EACH ROW 
 EXECUTE PROCEDURE set_update_timestamp();
 
 CREATE TRIGGER update_timestamp_feeds
-BEFORE INSERT, UPDATE ON feeds
+BEFORE UPDATE ON feeds
 FOR EACH ROW 
 EXECUTE PROCEDURE set_update_timestamp();
 
