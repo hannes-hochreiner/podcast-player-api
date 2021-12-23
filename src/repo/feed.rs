@@ -1,10 +1,11 @@
 use anyhow::Result;
 use chrono::{DateTime, FixedOffset};
+use serde::Serialize;
 use std::convert::TryFrom;
 use tokio_postgres::Row;
 use uuid::Uuid;
 
-#[derive(Clone)]
+#[derive(Clone, Serialize)]
 pub struct Feed {
     pub id: Uuid,
     pub url: String,

@@ -60,6 +60,21 @@ impl Repo {
         }
     }
 
+    pub async fn create_feed(&self, feed_url: &str) -> Result<Feed> {
+        let rows = self
+            .client
+            .query(
+                "INSERT INTO feeds (id, url) VALUES ($1, $2) RETURNING *",
+                &[&Uuid::new_v4(), &String::from(feed_url)],
+            )
+            .await?;
+
+        match rows.len() {
+            1 => Ok(Feed::try_from(&rows[0])?),
+            _ => Err(anyhow::Error::msg("error creating feed")),
+        }
+    }
+
     pub async fn get_channel_by_title_feed_id(
         &self,
         title: &str,

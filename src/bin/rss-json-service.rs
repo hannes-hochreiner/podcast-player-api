@@ -2,7 +2,7 @@
 extern crate rocket;
 extern crate rss_json_service;
 use anyhow::Context;
-use chrono::{DateTime, FixedOffset};
+use chrono::DateTime;
 use hyper::{body::Bytes, body::HttpBody as _, header::ToStrError, http::uri::InvalidUri};
 use log::error;
 use rocket::{
@@ -11,7 +11,7 @@ use rocket::{
 };
 use rss_json_service::{
     fetcher,
-    repo::{channel::Channel, item::Item, Repo},
+    repo::{channel::Channel, feed::Feed, item::Item, Repo},
     types::service_config,
 };
 use std::{env, str};
@@ -21,7 +21,7 @@ use uuid::Uuid;
 const TIMEOUT: Duration = Duration::from_secs(3);
 
 #[get("/feeds?<since>")]
-async fn feeds(
+async fn get_feeds(
     repo: &State<Repo>,
     since: Option<String>,
 ) -> Result<Json<Vec<Channel>>, CustomError> {
@@ -35,6 +35,11 @@ async fn feeds(
         )),
         None => Ok(Json(repo.get_all_channels(None).await?)),
     }
+}
+
+#[post("/feeds", data = "<url>")]
+async fn post_feeds(repo: &State<Repo>, url: String) -> Result<Json<Feed>, CustomError> {
+    Ok(Json(repo.create_feed(&url).await?))
 }
 
 #[get("/channels?<since>")]
@@ -119,9 +124,10 @@ async fn rocket() -> _ {
 
     let repo = Repo::new(&connection).await.unwrap();
 
-    rocket::build()
-        .manage(repo)
-        .mount("/", routes![channels, channel_items, item_stream, feeds])
+    rocket::build().manage(repo).mount(
+        "/",
+        routes![channels, channel_items, item_stream, get_feeds, post_feeds],
+    )
 }
 
 struct CustomError {
