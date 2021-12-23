@@ -31,15 +31,18 @@ impl Repo {
         Ok(Repo { client })
     }
 
-    pub async fn get_feeds(&self) -> Result<Vec<Feed>> {
-        let rows = self.client.query("SELECT id, url FROM feeds", &[]).await?;
-        let mut res = Vec::<Feed>::new();
-
-        for row in rows {
-            res.push(Feed::try_from(&row)?);
+    pub async fn get_feeds(&self, update_ts: Option<DateTime<FixedOffset>>) -> Result<Vec<Feed>> {
+        match update_ts.as_ref() {
+            Some(update) => {
+                self.client
+                    .query("SELECT id, url FROM feeds WHERE update_ts >= $1", &[update])
+                    .await?
+            }
+            None => self.client.query("SELECT id, url FROM feeds", &[]).await?,
         }
-
-        Ok(res)
+        .iter()
+        .map(Feed::try_from)
+        .collect()
     }
 
     pub async fn update_feed(&self, feed: &Feed) -> Result<Feed> {
@@ -75,21 +78,17 @@ impl Repo {
         &self,
         since: Option<DateTime<FixedOffset>>,
     ) -> Result<Vec<Channel>> {
-        let rows = match since {
+        match since {
             Some(s) => {
                 self.client
-                    .query("SELECT * FROM channels WHERE update_ts > $1", &[&s])
+                    .query("SELECT * FROM channels WHERE update_ts >= $1", &[&s])
                     .await?
             }
             None => self.client.query("SELECT * FROM channels", &[]).await?,
-        };
-        let mut res = Vec::<Channel>::new();
-
-        for row in rows {
-            res.push(Channel::try_from(&row)?)
         }
-
-        Ok(res)
+        .iter()
+        .map(Channel::try_from)
+        .collect()
     }
 
     pub async fn create_channel(
@@ -116,18 +115,29 @@ impl Repo {
         }
     }
 
-    pub async fn get_items_by_channel_id(&self, channel_id: &Uuid) -> Result<Vec<Item>> {
-        let rows = self
-            .client
-            .query("SELECT * FROM items WHERE channel_id = $1", &[channel_id])
-            .await?;
-        let mut res = Vec::<Item>::new();
-
-        for row in rows {
-            res.push(Item::try_from(&row)?)
+    pub async fn get_items_by_channel_id(
+        &self,
+        channel_id: &Uuid,
+        since: Option<DateTime<FixedOffset>>,
+    ) -> Result<Vec<Item>> {
+        match since.as_ref() {
+            Some(update) => {
+                self.client
+                    .query(
+                        "SELECT * FROM items WHERE channel_id = $1 WHERE update_ts >= $2",
+                        &[channel_id, update],
+                    )
+                    .await?
+            }
+            None => {
+                self.client
+                    .query("SELECT * FROM items WHERE channel_id = $1", &[channel_id])
+                    .await?
+            }
         }
-
-        Ok(res)
+        .iter()
+        .map(Item::try_from)
+        .collect()
     }
 
     pub async fn get_item_by_id(&self, id: &Uuid) -> Result<Item> {

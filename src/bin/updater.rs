@@ -36,7 +36,7 @@ async fn main() -> Result<()> {
     let repo = Repo::new(&connection).await?;
 
     loop {
-        let feeds = repo.get_feeds().await?;
+        let feeds = repo.get_feeds(None).await?;
 
         for db_feed in feeds {
             let feed_url = db_feed.url.clone();
