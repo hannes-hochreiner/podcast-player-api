@@ -27,16 +27,16 @@ const TIMEOUT: Duration = Duration::from_secs(3);
 async fn get_feeds(
     repo: &State<Repo>,
     since: Option<String>,
-) -> Result<Json<Vec<Channel>>, CustomError> {
+) -> Result<Json<Vec<Feed>>, CustomError> {
     match since {
         Some(s) => Ok(Json(
-            repo.get_all_channels(Some(
+            repo.get_feeds(Some(
                 DateTime::parse_from_rfc3339(&s)
                     .context(format!("could not parse filter date \"{}\"", s))?,
             ))
             .await?,
         )),
-        None => Ok(Json(repo.get_all_channels(None).await?)),
+        None => Ok(Json(repo.get_feeds(None).await?)),
     }
 }
 
