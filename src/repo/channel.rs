@@ -1,4 +1,5 @@
 use anyhow::Result;
+use chrono::{DateTime, FixedOffset};
 use serde::Serialize;
 use std::convert::TryFrom;
 use tokio_postgres::Row;
@@ -11,6 +12,7 @@ pub struct Channel {
     pub description: String,
     pub image: Option<String>,
     pub feed_id: Uuid,
+    pub update_ts: DateTime<FixedOffset>,
 }
 
 impl Channel {
@@ -36,6 +38,7 @@ impl TryFrom<&Row> for Channel {
                 Err(_) => None,
             },
             feed_id: row.try_get("feed_id")?,
+            update_ts: row.try_get("update_ts")?,
         })
     }
 }

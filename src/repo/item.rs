@@ -13,6 +13,7 @@ pub struct Item {
     pub enclosure_type: String,
     pub enclosure_url: String,
     pub channel_id: Uuid,
+    pub update_ts: DateTime<FixedOffset>,
 }
 
 impl Item {
@@ -36,6 +37,7 @@ impl TryFrom<&Row> for Item {
             enclosure_type: row.try_get("enclosure_type")?,
             enclosure_url: row.try_get("enclosure_url")?,
             channel_id: row.try_get("channel_id")?,
+            update_ts: row.try_get("update_ts")?,
         })
     }
 }
