@@ -33,7 +33,15 @@ async fn main() -> Result<()> {
         }
     }?;
 
-    let repo = Repo::new(&connection).await?;
+    let repo = match Repo::new(&connection).await {
+        Ok(rep) => Ok(rep),
+        Err(e) => {
+            log::warn!("error creating repo; waiting 3s before retry: {}", e);
+            sleep(Duration::from_secs(3)).await;
+            Repo::new(&connection).await
+        }
+    }
+    .unwrap();
 
     loop {
         let feeds = repo.get_feeds(None).await?;

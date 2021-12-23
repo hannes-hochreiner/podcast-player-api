@@ -15,7 +15,10 @@ use rss_json_service::{
     types::service_config,
 };
 use std::{env, str};
-use tokio::{fs, time::Duration};
+use tokio::{
+    fs,
+    time::{sleep, Duration},
+};
 use uuid::Uuid;
 
 const TIMEOUT: Duration = Duration::from_secs(3);
@@ -122,7 +125,15 @@ async fn rocket() -> _ {
     }
     .unwrap();
 
-    let repo = Repo::new(&connection).await.unwrap();
+    let repo = match Repo::new(&connection).await {
+        Ok(rep) => Ok(rep),
+        Err(e) => {
+            log::warn!("error creating repo; waiting 3s before retry: {}", e);
+            sleep(Duration::from_secs(3)).await;
+            Repo::new(&connection).await
+        }
+    }
+    .unwrap();
 
     rocket::build().manage(repo).mount(
         "/",
