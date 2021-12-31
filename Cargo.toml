@@ -2,7 +2,7 @@
 name = "rss-json-service"
 version = "2.1.2"
 authors = ["Hannes Hochreiner <hannes@hochreiner.net>"]
-edition = "2018"
+edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
