@@ -1,16 +1,11 @@
-pub mod channel;
-pub mod feed;
-pub mod item;
-
 use anyhow::Result;
 use chrono::{DateTime, FixedOffset};
+use podcast_player_common::{
+    channel_val::ChannelVal as Channel, feed_val::FeedVal as Feed, item_val::ItemVal as Item,
+};
 use std::{convert::TryFrom, str};
 use tokio_postgres::{Client, NoTls};
 use uuid::Uuid;
-
-use channel::Channel;
-use feed::Feed;
-use item::Item;
 
 pub struct Repo {
     client: Client,

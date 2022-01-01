@@ -933,6 +933,37 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3831453b3449ceb48b6d9c7ad7c96d5ea673e9b470a1dc578c2ce6521230884c"
 
 [[package]]
+name = "podcast-player-api"
+version = "2.1.2"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "env_logger",
+ "hyper",
+ "hyper-tls",
+ "log",
+ "podcast-player-common",
+ "rocket",
+ "roxmltree",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tokio-postgres",
+ "uuid",
+]
+
+[[package]]
+name = "podcast-player-common"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "serde",
+ "tokio-postgres",
+ "uuid",
+]
+
+[[package]]
 name = "postgres-protocol"
 version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1197,25 +1228,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "921904a62e410e37e215c40381b7117f830d9d89ba60ab5236170541dd25646b"
 dependencies = [
  "xmlparser",
-]
-
-[[package]]
-name = "rss-json-service"
-version = "2.1.2"
-dependencies = [
- "anyhow",
- "chrono",
- "env_logger",
- "hyper",
- "hyper-tls",
- "log",
- "rocket",
- "roxmltree",
- "serde",
- "serde_json",
- "tokio",
- "tokio-postgres",
- "uuid",
 ]
 
 [[package]]

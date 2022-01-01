@@ -105,3 +105,9 @@ RUST_LOG=info UPDATER_CONFIG_FILE=config.json cargo run --bin updater
     "db_connection": "postgresql://<updater db user>:<updater password>@<host>:5432/rss_json"
 }
 ```
+
+## License
+
+This work is licensed under the MIT license.
+
+`SPDX-License-Identifier: MIT`

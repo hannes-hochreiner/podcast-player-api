@@ -1,8 +1,9 @@
-extern crate rss_json_service;
+extern crate podcast_player_api;
 use anyhow::Result;
 use log::{error, info};
+use podcast_player_api::{fetcher::*, repo::Repo, rss_feed, types};
+use podcast_player_common::feed_val::FeedVal as Feed;
 use rss_feed::RssFeed;
-use rss_json_service::{fetcher::*, repo::feed::Feed, repo::Repo, rss_feed, types};
 use std::convert::TryFrom;
 use std::{env, str};
 use tokio::{

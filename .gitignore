@@ -1,5 +1,4 @@
 # Added by cargo
-
 /target
 
 # Exclude legacy, which was only kept to help create new tests
@@ -9,4 +8,4 @@
 /ansible/vars.yml
 
 # Exclude test configuration
-config.json
+/config.json

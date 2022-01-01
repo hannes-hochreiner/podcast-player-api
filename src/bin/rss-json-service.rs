@@ -1,22 +1,21 @@
 #[macro_use]
 extern crate rocket;
-extern crate rss_json_service;
+extern crate podcast_player_api;
 use anyhow::Context;
 use chrono::DateTime;
 use hyper::{body::Bytes, body::HttpBody as _, header::ToStrError, http::uri::InvalidUri};
 use log::error;
+use podcast_player_api::{fetcher, repo::Repo, types::service_config};
+use podcast_player_common::{
+    channel_val::ChannelVal as Channel, feed_val::FeedVal as Feed, item_val::ItemVal as Item,
+};
 use rocket::{
     http::Status, response, response::stream::ByteStream, response::Responder, serde::json::Json,
     Request, State,
 };
-use rss_json_service::{
-    fetcher,
-    repo::{channel::Channel, feed::Feed, item::Item, Repo},
-    types::service_config,
-};
 use std::{env, str};
 use tokio::{
-    fs,
+    fs, spawn,
     time::{sleep, Duration},
 };
 use uuid::Uuid;
@@ -135,10 +134,19 @@ async fn rocket() -> _ {
     }
     .unwrap();
 
+    spawn(async move { update_process().await });
+
     rocket::build().manage(repo).mount(
         "/",
         routes![channels, channel_items, item_stream, get_feeds, post_feeds],
     )
+}
+
+async fn update_process() {
+    loop {
+        log::info!("update_rocess");
+        sleep(Duration::from_secs(5)).await;
+    }
 }
 
 struct CustomError {

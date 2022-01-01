@@ -1,5 +1,5 @@
 [package]
-name = "rss-json-service"
+name = "podcast-player-api"
 version = "2.1.2"
 authors = ["Hannes Hochreiner <hannes@hochreiner.net>"]
 edition = "2021"
@@ -20,6 +20,7 @@ serde = "1"
 serde_json = "1.0"
 log = "0"
 env_logger = "0"
+podcast-player-common = { path="../podcast-player-common", features=["tokio-postgres"] }
 
 [package.metadata.release]
 publish = false
