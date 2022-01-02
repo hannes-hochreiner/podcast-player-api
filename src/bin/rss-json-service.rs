@@ -68,26 +68,17 @@ async fn channels(
     }
 }
 
-#[get("/channels/<channel_id>/items?<since>")]
-async fn channel_items(
-    repo: &State<Repo>,
-    channel_id: &str,
-    since: Option<String>,
-) -> Result<Json<Vec<Item>>, CustomError> {
-    let channel_id = Uuid::parse_str(channel_id)?;
-
+#[get("/items?<since>")]
+async fn items(repo: &State<Repo>, since: Option<String>) -> Result<Json<Vec<Item>>, CustomError> {
     match since {
         Some(s) => Ok(Json(
-            repo.get_items_by_channel_id(
-                &channel_id,
-                Some(
-                    DateTime::parse_from_rfc3339(&s)
-                        .context(format!("could not parse filter date \"{}\"", s))?,
-                ),
-            )
+            repo.get_all_items(Some(
+                DateTime::parse_from_rfc3339(&s)
+                    .context(format!("could not parse filter date \"{}\"", s))?,
+            ))
             .await?,
         )),
-        None => Ok(Json(repo.get_items_by_channel_id(&channel_id, None).await?)),
+        None => Ok(Json(repo.get_all_items(None).await?)),
     }
 }
 
@@ -136,7 +127,7 @@ async fn rocket() -> _ {
 
     rocket::build().manage(repo).mount(
         "/",
-        routes![channels, channel_items, item_stream, get_feeds, post_feeds],
+        routes![channels, items, item_stream, get_feeds, post_feeds],
     )
 }
 

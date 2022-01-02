@@ -131,25 +131,14 @@ impl Repo {
         }
     }
 
-    pub async fn get_items_by_channel_id(
-        &self,
-        channel_id: &Uuid,
-        since: Option<DateTime<FixedOffset>>,
-    ) -> Result<Vec<Item>> {
-        match since.as_ref() {
-            Some(update) => {
+    pub async fn get_all_items(&self, since: Option<DateTime<FixedOffset>>) -> Result<Vec<Item>> {
+        match since {
+            Some(s) => {
                 self.client
-                    .query(
-                        "SELECT * FROM items WHERE channel_id = $1 WHERE update_ts >= $2",
-                        &[channel_id, update],
-                    )
+                    .query("SELECT * FROM items WHERE update_ts >= $1", &[&s])
                     .await?
             }
-            None => {
-                self.client
-                    .query("SELECT * FROM items WHERE channel_id = $1", &[channel_id])
-                    .await?
-            }
+            None => self.client.query("SELECT * FROM items", &[]).await?,
         }
         .iter()
         .map(Item::try_from)
