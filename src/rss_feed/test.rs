@@ -137,6 +137,46 @@ fn parse_lin_digres() {
 }
 
 #[test]
+fn parse_minkorrekt() {
+    let feed =
+        RssFeed::try_from(&*fs::read_to_string("testFiles/minkorrekt.xml").unwrap()).unwrap();
+
+    assert_eq!(feed.channels.len(), 1);
+    assert_eq!(
+        feed.channels[0],
+        RssChannel {
+            title: String::from("Methodisch inkorrekt!"),
+            description: String::from("der methodisch inkorrekte Wissenschaftspodcast"),
+            image: Some(String::from("https://images.podigee-cdn.net/0x,srhipgyug44BeyTko7VrGtswPXmBVkFavcRQPA4gts-E=/https://cdn.podigee.com/uploads/u2487/51751e79-4c75-43cc-b213-8e0cd040f439.jpg")),
+            items: vec![RssItem {
+                title: String::from("Mi206 - \"Zwischen den Jahren\""),
+                date: Utc.ymd(2021, 12, 29).and_hms(09, 55, 58).into(),
+                enclosure: RssEnclosure {
+                    url: String::from("https://cdn.podigee.com/media/podcast_3451_methodisch_inkorrekt_episode_627156_mi206_zwischen_den_jahren.mp3?v=1640772750&source=feed"),
+                    mime_type: String::from("audio/mpeg"),
+                    length: 253548623,
+                }
+            },
+            RssItem {
+                title: String::from("Mi205 - \"Mettbett\""),
+                date: Utc.ymd(2021, 12, 14).and_hms(18, 55, 06).into(),
+                enclosure: RssEnclosure {
+                    url: String::from("https://adn.podigee.com/adswizz/media/podcast_3451_methodisch_inkorrekt_episode_615122_mi205_mettbett.mp3?awCollectionId=svo_cea0cf&awEpisodeId=615122&source=feed&v=1639560073"),
+                    mime_type: String::from("audio/mpeg"),
+                    length: 302222176,
+                }
+            }],
+        }
+    );
+}
+
+#[test]
+fn parse_minkorrekt_missing() {
+    let _ = RssFeed::try_from(&*fs::read_to_string("testFiles/minkorrekt_missing.xml").unwrap())
+        .unwrap();
+}
+
+#[test]
 fn parse_date_1() {
     assert_eq!(
         RssFeed::parse_date("Tue, 13 Mar 2018 19:08:36 +0000").unwrap(),

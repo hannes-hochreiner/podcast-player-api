@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:googleplay="http://www.google.com/schemas/play-podcasts/1.0" version="2.0">
+  <channel>
+    <atom:link href="https://pubsubhubbub.appspot.com/" rel="hub"/>
+    <atom:link href="https://minkorrekt.podigee.io/feed/mp3" rel="self"/>
+    <atom:link href="https://minkorrekt.podigee.io/feed/mp3" rel="first"/>
+    <atom:link href="https://minkorrekt.podigee.io/feed/mp3?page=1" rel="last"/>
+    <title>Methodisch inkorrekt!</title>
+    <language>de</language>
+    <pubDate>Wed, 16 May 2018 00:00:00 +0000</pubDate>
+    <lastBuildDate>Wed, 29 Dec 2021 10:29:47 +0000</lastBuildDate>
+    <description>der methodisch inkorrekte Wissenschaftspodcast</description>
+    <link>http://www.minkorrekt.de</link>
+    <generator>Podigee (https://podigee.com)</generator>
+    <itunes:type>episodic</itunes:type>
+    <copyright>CC 3.0</copyright>
+    <image>
+      <url>https://images.podigee-cdn.net/0x,srhipgyug44BeyTko7VrGtswPXmBVkFavcRQPA4gts-E=/https://cdn.podigee.com/uploads/u2487/51751e79-4c75-43cc-b213-8e0cd040f439.jpg</url>
+      <title>Methodisch inkorrekt!</title>
+      <link>http://www.minkorrekt.de</link>
+    </image>
+    <itunes:image href="https://images.podigee-cdn.net/0x,srhipgyug44BeyTko7VrGtswPXmBVkFavcRQPA4gts-E=/https://cdn.podigee.com/uploads/u2487/51751e79-4c75-43cc-b213-8e0cd040f439.jpg"/>
+    <itunes:subtitle>der methodisch inkorrekte Wissenschaftspodcast</itunes:subtitle>
+    <itunes:author>Methodisch inkorrekt!</itunes:author>
+    <itunes:explicit>yes</itunes:explicit>
+    <itunes:keywords></itunes:keywords>
+    <itunes:category text="Science"/>
+    <itunes:summary>der methodisch inkorrekte Wissenschaftspodcast</itunes:summary>
+    <itunes:owner>
+      <itunes:name>Methodisch inkorrekt!</itunes:name>
+      <itunes:email>info@methodisch-inkorrekt.de</itunes:email>
+    </itunes:owner>
+    <item>
+      <title>Mi206 - "Zwischen den Jahren"</title>
+      <itunes:title>Mi206 - "Zwischen den Jahren"</itunes:title>
+      <description>Folge 206 vom 29.12.21
+
+diesmal mit Pestiziden, Schlaf und einem grünen Weihnachtsstern.
+
+Experiment der Woche: Weinflaschenschall</description>
+      <pubDate>Wed, 29 Dec 2021 09:55:58 +0000</pubDate>
+      <link>https://minkorrekt.de/mi206-zwischen-den-jahren/</link>
+      <guid isPermaLink="false">bbad208f9f72b6ca50394b18e0710cae</guid>
+      <content:encoded>
+        <![CDATA["Zwischen den Jahren" direkt vom Dinner for ONE der Wissenschaft.
+<!-- wp:paragraph -->
+<p><strong>Inhalt:</strong></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>00:00:00 Intro<br>00:00:57 Begrüßung<br>00:02:55 Ruhepause<br>00:11:00 Gastauftritte in Podcasts<br>00:15:58 Verschiedenes<br>00:50:49 Kommentare<br>01:08:45 Themen der Woche<br>01:09:50 Interview Thomas Hörren<br>02:07:54 Thema 2: "It's not a bug…"<br>02:27:33 Experiment der Woche<br>02:44:34 Thema 3: "grüner Weihnachtsstern"<br>03:01:05 Zusammenfassung<br>03:02:04 Schwurbel<br>03:22:56 Hausmeisterei</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Wir haben den Film "<a href="https://www.netflix.com/de/title/81252357">Don't Look up</a>" gesehen und können den für einen gemütlichen Fernsehabend sehr empfehlen.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Wenn euer Podcatcher langsam leer läuft, dann haben wir da was für euch. Wir waren zum einen zu Gast im <a href="https://nachgefragt-podcast.de/2021/12/21/ngf048-spezial-methodisch-inkorrektes-weihnachtsfest/">Nachgefragt Podcast</a> und Nicolas war noch zu Besuch beim "<a href="https://radio-freies-ertrus.de/2021/12/18/radio-freies-ertrus-sondersendung-008-zu-gast-im-radio-nicolas-woehrl/">Radio Ertrus</a>" um endlich über Perry Rhodan zu reden.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Ansonsten könnt ihr die Zeit zwischen den Jahren ja auch nutzen um mal wieder etwas neues zu lernen. Nicolas lernt gerade zum Beispiel "<a href="https://learnpythonthehardway.org/">Python the hard way</a>".</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Wir haben Hörerkommentare zu Coronaleugnern und Tests in KITAS bekommen und Reinhard <a href="https://giphy.com/gifs/security-11fot0YzpQMA0g">erwähnt kurz ein GIF</a> das ihm dabei in den Sinn kam.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p><strong>Thema 1:</strong> „<a href="https://www.nature.com/articles/s41598-021-03366-w">Pestizitinsekten</a>" –  Wir reden mit Thomas über sein Paper zu Pestiziden in Naturschutzgebieten. Folgt Thomas gern auf <a href="https://twitter.com/thoerren">Twitter</a> und <a href="https://www.instagram.com/totholz.thomas/">Insta</a>.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p><strong>Thema 2: „</strong><a href="https://www.science.org/doi/10.1126/sciadv.abj5866">Its not a bug...</a><strong>"</strong> – In der ersten Phase des Einschlafens sind wir besonders gut darin kreative Lösungen zu finden. Das kann man eventuell sogar mal nutzen, wir werden es mal testen.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p><strong>Experiment der Woche:</strong> „Weinflasche öffnen“ – Mit der wunderbaren App <a href="https://phyphox.org">Phyphox</a>, deren <a href="https://minkorrekt.de/mi191-fremdkork/">Macher wir mal in einer alten Folge interviewt haben</a>. kann man mit einer Weinflasche die Schallgeschwindigkeit messen. Wem das alles in der Folge zu komplex war, der kann es nochmal in dem Artikel von <a href="https://www.pro-physik.de/nachrichten/plopp-so-schnell-ist-der-schall">ProPhysik</a> nachlesen.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p><strong>Thema 3:</strong> „<a href="https://www.pnas.org/content/118/52/e2113315118">Grüner Weihnachtsstern</a>" – Wir erklären warum ein Komet "vorne" grün leuchtet und was das mit Diamanten und Plasma zu tun hat.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p><strong>Schwurbel der Woche:</strong> <a href="https://impffrei.work/">Impffrei.work</a> Wenn ihr wissen wollt wo ihr nicht arbeiten wollt, dann schaut mal auf dieser Seite vorbei.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p><strong>Hausmeisterei:</strong> </p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Die Tourplanung ist immer noch schwierig und teilweise müssen Termine mittlerweile abgesagt werden weil die Veranstalter sonst keine Hilfen erhalten können. Glaubt uns, wir wollen auch wieder auf die Bühne, aber habt bitte auch Verständnis für die Leute die hinter den Kulissen gerade ihr Möglichstes tun um eine Tour bald wieder möglich zu machen.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Die Bewerbungsphase der Min:ions ist durch und wir sichten gerade die Bewerbungen. Zwischen den Jahren treffen wir eine Vorauswahl :)</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Der nächste Minkorrekt-Lifestream muss leider nochmal ausfallen weil wir eine kleine Pause brauchen, danach geht es aber wie gewohnt weiter.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p><strong>Wichtige Adressen:</strong></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Unseren Discord findet ihr unter: <a href="https://discord.gg/PZ3cTUdMNx">https://discord.gg/PZ3cTUdMNx</a></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Merch gibt es hier: <a href="http://www.modisch-inkorrekt.de">http://www.modisch-inkorrekt.de</a></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Minkorrekt ohne Werbung bekommt ihr bei <a href="https://steadyhq.com/de/minkorrekt/about">Steady</a>.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Intro war "Dinner for ONE"</p>
+<!-- /wp:paragraph -->]]>
+      </content:encoded>
+      <itunes:image href="https://images.podigee-cdn.net/0x,sogAhHk-phu0zif0VG5oVOGeVjOq_MrAqjwntxoH5E20=/https://cdn.podigee.com/uploads/u2487/66460a2a-a47e-4025-b593-9d18920e29a2.jpg"/>
+      <itunes:episode>210</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:subtitle>"Zwischen den Jahren" direkt vom Dinner for ONE der Wissenschaft.</itunes:subtitle>
+      <itunes:summary>Folge 206 vom 29.12.21
+
+diesmal mit Pestiziden, Schlaf und einem grünen Weihnachtsstern.
+
+Experiment der Woche: Weinflaschenschall</itunes:summary>
+      <itunes:explicit>yes</itunes:explicit>
+      <itunes:keywords>Remfort,Wöhrl,Weinachten</itunes:keywords>
+      <itunes:author>Methodisch inkorrekt!</itunes:author>
+      <enclosure url="https://cdn.podigee.com/media/podcast_3451_methodisch_inkorrekt_episode_627156_mi206_zwischen_den_jahren.mp3?v=1640772750&amp;source=feed" type="audio/mpeg" length="253548623"/>
+      <itunes:duration>12640</itunes:duration>
+    </item>
+    <item>
+      <title>Mi205 - "Mettbett"</title>
+      <itunes:title>Mi205 - "Mettbett"</itunes:title>
+      <description>Folge 205 vom 14.12.21
+
+diesmal mit Evolution, Konsum, Hasskommentaren und ganz viel Plastik.
+
+Experiment der Woche: Magnetisches Wasser</description>
+      <pubDate>Tue, 14 Dec 2021 18:55:06 +0000</pubDate>
+      <link>https://minkorrekt.de/mi205-mettbett/</link>
+      <guid isPermaLink="false">1a9a985f80bc20792b2a8380010b616b</guid>
+      <content:encoded>
+        <![CDATA["Mettbett" direkt vom Impfzentrum der Wissenschaft
+<!-- wp:paragraph -->
+<p>Das Labor stand nach langer Zeit mal wieder unter Wasser...diesmal waren die Wissenschaftler aber unschuldig! Ein Fehler bei Arbeiten an den Versorgungsleitungen der Uni hat eine halbe Etage unter Wasser gesetzt.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Wir berichten außerdem noch von unserem Bastelwochenende für die Tour und unseren neuen Shirts die ihr bei <a href="http://www.modisch-inkorrekt.de" data-type="URL" data-id="www.modisch-inkorrekt.de">www.modisch-inkorrekt.de</a> findet.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Gerade in der besinnlichen Weihnachtszeit in der man vielleicht auch dem ein oder anderen Schwurbler im engeren Familienkreis begegnet möchten wir euch unbedingt nochmal das Buch "<a href="https://kattascha.de/publikationen/">True Facts</a>" von Pia und Katharina ans Herz legen. Für eins der 10 Bücher von Kattascha und Pia schreibt einfach eine Mail mit eurer Adresse an willhaben@minkorrekt.de.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Außerdem solltet ihr euch die letzte Episode von "<a href="https://ponywurst.com/139-reinhard-remfort-glueck-und-erfolg/">Das Ziel ist im Weg!</a>" anhören. Reini war mal wieder bei Loffi zu Gast und es ging diesmal um Erfolg und welche Rolle das Glück dabei spielt.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Der liebe Nono hat uns gebeten auf eine Aktion von <a href="https://www.vivaconagua.org/deine-spende-als-geschenk/">Viva con Aqua</a> aufmerksam zu machen. Verschenkt zu Weihnachten doch einfach mal Wasser an Menschen die es brauchen.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p><strong>Thema 1:</strong> „<a href="https://www.nature.com/articles/s41557-021-00830-y">Urzeit-Evolutionslabore</a>" –  Wo genau ist eigentlich das Leben auf der Erde enstanden? Ein im wahrsten Sinne des Wortes heißer Kandidat sind Poren in heißen Gesteinen.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p><strong>Thema 2:</strong> „<a href="https://journals.sagepub.com/doi/10.1177/00222429211061367">Konsum ist Handarbeit</a>" – Das Design von Einkaufswagen beeinflusst unser Kaufverhalten und zwar viel subtiler als ihr denkt. <a href="https://openaccess.city.ac.uk/id/eprint/27060/1/Estes%20%26%20Streicher%20JM%20Preprint.pdf">Hier findet ihr ein Preprint des Papers</a>.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p><strong>Experiment der Woche:</strong> „Magnetisches Wasser“ – mit einem starken Magneten kann man eigentlich alles anziehen was auf Wasser schwimmt. Warum das so ist erfahrt ihr bei uns oder in <a href="https://www.youtube.com/watch?v=jIMihpDmBpY">diesem Video</a>.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p><strong>Musik:</strong> <a href="https://www.youtube.com/watch?v=3GHS9JZZkhs">"Mitosis in a Winter Wonderland (Christmas / Science Song)" </a></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p><strong>Thema 3:</strong> „<a href="https://www.pnas.org/content/118/50/e2116310118">When they go low, we go high</a>" – Wie geht man am besten mit Hasskommentaren im Internet um? Diese Studie legt nahe, das man hier mit Empathie am besten fährt.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p><strong>Thema 4:</strong> „<a href="https://onlinelibrary.wiley.com/doi/10.1111/gcb.15920">Erzwungener Leichtbau</a>" – Korallen bauen Mirkoplastik in ihr Gewebe und in ihre Behausungen ein. Das ist einerseits die erste natürliche Senke für Mikroplastik, aber auch besorgniserregend in Bezug auf unsere Meere.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p><strong>Schwurbel der Woche:</strong> Der Schwurbel der Woche ist diesmal das <a href="https://quantenfrequenzmedizin.com/products/das-9010-medbed">Quantenbett</a>! Das angesprochene "Paper" von unserem neuen Freund Herrn Dartsch findet ihr <a href="https://biomedres.us/fulltexts/BJSTR.MS.ID.006227.php">hier</a>.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p><strong>Hausmeisterei:</strong> </p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Die Bewerbungsphase der Min:ions ist durch und wir sichten gerade die Bewerbungen. Zwischen den Jahren treffen wir eine Vorauswahl :)</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Der nächste Minkorrekt-Lifestream muss weihnachtsbedingt leider ausfallen.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p><strong>Interview:</strong>  Nicolas hat sich mit jemand von der Organisation <a href="https://worldbicyclerelief.org/de/">World Bicycle Relief</a> unterhalten. Warum? Bei der <a href="https://markusbrandstaetter.at/minkorrekt">Minkorrekt-Trikotaktion</a> (Danke Markus) ist damals so viel bestellt worden, dass der Hersteller uns einen recht großen Rabatt gegeben hat. </p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Die Menschen von WBR haben diese Spende zum Anlass genommen eine kleine Minkorrekt <a href="https://join.worldbicyclerelief.org/minkorrekt/celebration">Spendenkampagne</a> zu starten.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p><strong>Wichtige Adressen:</strong></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Unseren Discord findet ihr unter: <a href="https://discord.gg/PZ3cTUdMNx">https://discord.gg/PZ3cTUdMNx</a></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Merch gibt es hier: <a href="http://www.modisch-inkorrekt.de">http://www.modisch-inkorrekt.de</a></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Minkorrekt ohne Werbung bekommt ihr bei <a href="https://steadyhq.com/de/minkorrekt/about">Steady</a>.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p><strong>Tourtermine:</strong></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Aktuelle Tourtermine und Links zum Ticketshop findet ihr oben unter <a href="https://minkorrekt.de/minkorrekt-live/">Minkorrekt! LIVE</a></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Wie die Abwicklung bei eventuell verschobenen Terminen genau abläuft, können wir euch zum jetzigen Zeitpunkt noch nicht sagen, da dies in der Hand der örtlichen Veranstalter liegt.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Intro war "Der sprechende Hut im Impfzentrum"</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p><strong>SPONSOR:</strong></p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Diese Episode wird unterstützt von <a href="http://www.higandchic.com" data-type="URL" data-id="www.higandchic.com">www.higandchic.com</a> </p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Jetzt wird's gemütlich - mit Bettwäsche von hig &amp; chic!<br>Hochwertige Bettwäsche aus nachhaltigen &amp; innovativen Eukalyptusfasern. </p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Mit dem Gutscheincode: "INKORREKT15" bekommt ihr 15 % Rabatt auf eure Bestellung :)</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Die genauen Details zu unserem Werbepartner findet ihr auch hier: <a href="https://linktr.ee/minkorrekt">Minkorrekt-Werbepartner</a></p>
+<!-- /wp:paragraph -->]]>
+      </content:encoded>
+      <itunes:image href="https://images.podigee-cdn.net/0x,saMxHeFygPH6oYA8XXL32dE4I7pP26vRIDXWEPpOSQdk=/https://cdn.podigee.com/uploads/u2487/4d853e3b-232b-4b82-bb8d-7b776f937e80.jpg"/>
+      <itunes:episode>209</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:subtitle>"Mettbett" direkt vom Impfzentrum der Wissenschaft</itunes:subtitle>
+      <itunes:summary>Folge 205 vom 14.12.21
+
+diesmal mit Evolution, Konsum, Hasskommentaren und ganz viel Plastik.
+
+Experiment der Woche: Magnetisches Wasser</itunes:summary>
+      <itunes:explicit>yes</itunes:explicit>
+      <itunes:keywords>Remfort,Wöhrl,Wissenschaft</itunes:keywords>
+      <itunes:author>Methodisch inkorrekt!</itunes:author>
+      <enclosure url="https://adn.podigee.com/adswizz/media/podcast_3451_methodisch_inkorrekt_episode_615122_mi205_mettbett.mp3?awCollectionId=svo_cea0cf&amp;awEpisodeId=615122&amp;source=feed&amp;v=1639560073" type="audio/mpeg" length="302222176"/>
+      <itunes:duration>15072</itunes:duration>
+    </item>
+  </channel>
+</rss>

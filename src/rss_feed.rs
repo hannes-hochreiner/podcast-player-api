@@ -68,9 +68,10 @@ impl RssFeed {
                 "image" => {
                     image = Self::parse_image(node)?;
                 }
-                "item" => {
-                    items.push(Self::parse_item(node)?);
-                }
+                "item" => match Self::parse_item(node) {
+                    Ok(item) => items.push(item),
+                    Err(e) => log::error!("error parsing item: {}", e),
+                },
                 _ => {}
             }
         }
@@ -117,13 +118,25 @@ impl RssFeed {
             }
         }
 
+        log::debug!(
+            "parsing item finished: title: {:?}, date: {:?}, enclosure: {:?}",
+            title,
+            date,
+            enclosure
+        );
+
         match (title, date, enclosure) {
             (Some(title), Some(date), Some(enclosure)) => Ok(RssItem {
                 title: String::from(title),
                 date: Self::parse_date(date)?,
                 enclosure,
             }),
-            _ => Err(anyhow::Error::msg("could not parse item")),
+            (None, _, _) => Err(anyhow::anyhow!("could not find title for item")),
+            (_, None, _) => Err(anyhow::anyhow!("could not find date for item")),
+            (title, _, None) => Err(anyhow::anyhow!(
+                "could not find enclosure for item: {:?}",
+                title
+            )),
         }
     }
 
