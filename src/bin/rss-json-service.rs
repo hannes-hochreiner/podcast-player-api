@@ -5,7 +5,7 @@ use anyhow::Context;
 use chrono::DateTime;
 use hyper::{body::Bytes, body::HttpBody as _, header::ToStrError, http::uri::InvalidUri};
 use log::error;
-use podcast_player_api::{fetcher, repo::Repo, types::service_config};
+use podcast_player_api::{fetcher, repo::Repo, updater::Updater};
 use podcast_player_common::{
     channel_val::ChannelVal as Channel, feed_val::FeedVal as Feed, item_val::ItemVal as Item,
 };
@@ -13,12 +13,19 @@ use rocket::{
     http::Status, response, response::stream::ByteStream, response::Responder, serde::json::Json,
     Request, State,
 };
+use serde::Deserialize;
 use std::{env, str};
 use tokio::{
     fs, spawn,
     time::{sleep, Duration},
 };
 use uuid::Uuid;
+
+#[derive(Debug, Deserialize)]
+pub struct PodcastPlayerApiConfig {
+    pub api_connection: String,
+    pub updater_connection: String,
+}
 
 const TIMEOUT: Duration = Duration::from_secs(3);
 
@@ -106,47 +113,31 @@ async fn item_stream(repo: &State<Repo>, item_id: &str) -> Result<ByteStream![By
 async fn rocket() -> _ {
     env_logger::init();
 
-    let connection = match (
-        env::var("RSS_JSON_SERVICE_CONNECTION"),
-        env::var("RSS_JSON_SERVICE_CONFIG_FILE"),
-    ) {
-        (Ok(conn), _) => Ok(conn),
-        (_, Ok(file)) => {
-            let config: service_config::ServiceConfig =
-                serde_json::from_str(&fs::read_to_string(file).await.unwrap()).unwrap();
-
-            Ok(config.db_connection)
-        }
-        (_, _) => {
-            error!("error reading configuration");
-            Err(anyhow::anyhow!("error reading configuration"))
-        }
-    }
+    let config: PodcastPlayerApiConfig = serde_json::from_str(
+        &fs::read_to_string(env::var("PODCAST_PLAYER_API_CONFIG_FILE").unwrap())
+            .await
+            .unwrap(),
+    )
     .unwrap();
 
-    let repo = match Repo::new(&connection).await {
+    let repo = match Repo::new(&config.api_connection).await {
         Ok(rep) => Ok(rep),
         Err(e) => {
             log::warn!("error creating repo; waiting 3s before retry: {}", e);
             sleep(Duration::from_secs(3)).await;
-            Repo::new(&connection).await
+            Repo::new(&config.api_connection).await
         }
     }
     .unwrap();
 
-    spawn(async move { update_process().await });
+    let updater = Updater::new(&config.updater_connection);
+
+    spawn(async move { updater.update_loop().await });
 
     rocket::build().manage(repo).mount(
         "/",
         routes![channels, channel_items, item_stream, get_feeds, post_feeds],
     )
-}
-
-async fn update_process() {
-    loop {
-        log::info!("update_rocess");
-        sleep(Duration::from_secs(5)).await;
-    }
 }
 
 struct CustomError {

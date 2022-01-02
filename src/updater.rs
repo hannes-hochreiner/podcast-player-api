@@ -1,50 +1,43 @@
-extern crate podcast_player_api;
+use crate::{fetcher::request, repo::Repo, rss_feed::RssFeed};
 use anyhow::Result;
-use log::{error, info};
-use podcast_player_api::{fetcher::*, repo::Repo, rss_feed, types};
-use podcast_player_common::feed_val::FeedVal as Feed;
-use rss_feed::RssFeed;
-use std::convert::TryFrom;
-use std::{env, str};
-use tokio::{
-    fs,
-    time::{sleep, Duration},
-};
+use log::{error, info, warn};
+use podcast_player_common::feed_val::FeedVal;
+use tokio::time::{sleep, Duration};
 
 const TIMEOUT: Duration = Duration::from_secs(3);
 
-#[tokio::main]
-async fn main() -> Result<()> {
-    env_logger::init();
+pub struct Updater {
+    connection: String,
+}
 
-    let connection = match (
-        env::var("UPDATER_CONNECTION"),
-        env::var("UPDATER_CONFIG_FILE"),
-    ) {
-        (Ok(conn), _) => Ok(conn),
-        (_, Ok(file)) => {
-            let config: types::updater_config::UpdaterConfig =
-                serde_json::from_str(&fs::read_to_string(file).await?)?;
-
-            Ok(config.db_connection)
-        }
-        (_, _) => {
-            error!("error reading configuration");
-            Err(anyhow::anyhow!("error reading configuration"))
-        }
-    }?;
-
-    let repo = match Repo::new(&connection).await {
-        Ok(rep) => Ok(rep),
-        Err(e) => {
-            log::warn!("error creating repo; waiting 3s before retry: {}", e);
-            sleep(Duration::from_secs(3)).await;
-            Repo::new(&connection).await
+impl Updater {
+    pub fn new(connection: &str) -> Self {
+        Self {
+            connection: connection.into(),
         }
     }
-    .unwrap();
 
-    loop {
+    pub async fn update_loop(&self) {
+        loop {
+            match &self.process_feeds().await {
+                Err(e) => error!("error processing feeds: {}", e),
+                _ => {}
+            }
+
+            sleep(Duration::from_secs(60 * 60)).await;
+        }
+    }
+
+    async fn process_feeds(&self) -> Result<()> {
+        let repo = match Repo::new(&self.connection).await {
+            Ok(rep) => Ok(rep),
+            Err(e) => {
+                warn!("error creating repo; waiting 3s before retry: {}", e);
+                sleep(Duration::from_secs(3)).await;
+                Repo::new(&self.connection).await
+            }
+        }?;
+
         let feeds = repo.get_feeds(None).await?;
 
         for db_feed in feeds {
@@ -56,11 +49,11 @@ async fn main() -> Result<()> {
             }
         }
 
-        sleep(Duration::from_secs(60 * 60)).await;
+        Ok(())
     }
 }
 
-async fn process_feed(db_feed: &Feed, repo: &Repo) -> Result<()> {
+async fn process_feed(db_feed: &FeedVal, repo: &Repo) -> Result<()> {
     let res = request(&db_feed.url, &TIMEOUT).await?;
 
     if let Some(new_url) = &res.1 {
@@ -73,7 +66,7 @@ async fn process_feed(db_feed: &Feed, repo: &Repo) -> Result<()> {
 
     // Concatenate the body stream into a single buffer...
     let buf = hyper::body::to_bytes(res.0).await?;
-    let rss_feed = RssFeed::try_from(str::from_utf8(&buf)?)?;
+    let rss_feed = RssFeed::try_from(std::str::from_utf8(&buf)?)?;
 
     for rss_channel in &rss_feed.channels {
         let db_channel = match repo
