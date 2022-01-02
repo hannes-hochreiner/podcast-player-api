@@ -1,6 +1,5 @@
-[![CI](https://github.com/hannes-hochreiner/rss-json-service/actions/workflows/main.yml/badge.svg)](https://github.com/hannes-hochreiner/rss-json-service/actions/workflows/main.yml)
-# rss-json-service
-A simple RSS to JSON web service.
+# Podcast Player API
+A simple RSS to JSON web service created as part of the [Podcast Player](https://github.com/hannes-hochreiner/podcast-player) project.
 
 The service parses a list of RSS feeds periodically into objects with the following properties:
 
