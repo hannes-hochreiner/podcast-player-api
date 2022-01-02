@@ -14,7 +14,7 @@ fn parse_bots() {
         feed.channels[0],
         RssChannel {
             title: String::from("O'Reilly Bots Podcast - O'Reilly Media Podcast"),
-            description: String::from("Exploring bots, conversational interfaces, AI, and messaging."),
+            description: String::from("The O'Reilly Bots Podcast covers advances in conversational user interfaces, artificial intelligence, and messaging that are revolutionizing the way we interact with software."),
             image: Some(String::from("http://cdn.oreilly.com/radar/bot-podcast/avatar_Bots_1400x1400.png")),
             items: vec![RssItem {
                 title: String::from("Jason Laska and Michael Akilian on using AI to schedule meetings"),
@@ -174,6 +174,21 @@ fn parse_minkorrekt() {
 fn parse_minkorrekt_missing() {
     let _ = RssFeed::try_from(&*fs::read_to_string("testFiles/minkorrekt_missing.xml").unwrap())
         .unwrap();
+}
+
+#[test]
+fn itunes_summary() {
+    let feed =
+        RssFeed::try_from(&*fs::read_to_string("testFiles/itunes_summary.xml").unwrap()).unwrap();
+    assert_eq!(
+        feed.channels[0],
+        RssChannel {
+            title: String::from("title"),
+            description: String::from("itunes summary"),
+            image: None,
+            items: vec![]
+        }
+    );
 }
 
 #[test]

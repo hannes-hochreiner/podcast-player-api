@@ -54,21 +54,25 @@ impl RssFeed {
     fn parse_channel(channel: Node) -> Result<RssChannel> {
         let mut title: Option<String> = None;
         let mut description: Option<String> = None;
+        let mut itunes_description: Option<String> = None;
         let mut image: Option<String> = None;
         let mut items: Vec<RssItem> = Vec::new();
 
         for node in channel.children() {
-            match node.tag_name().name() {
-                "title" => {
+            match (node.tag_name().namespace(), node.tag_name().name()) {
+                (_, "title") => {
                     title = node.text().map(|e| String::from(e));
                 }
-                "description" => {
+                (_, "description") => {
                     description = node.text().map(|e| String::from(e.trim()));
                 }
-                "image" => {
+                (Some("http://www.itunes.com/dtds/podcast-1.0.dtd"), "summary") => {
+                    itunes_description = node.text().map(|e| String::from(e.trim()));
+                }
+                (_, "image") => {
                     image = Self::parse_image(node)?;
                 }
-                "item" => match Self::parse_item(node) {
+                (_, "item") => match Self::parse_item(node) {
                     Ok(item) => items.push(item),
                     Err(e) => log::error!("error parsing item: {}", e),
                 },
@@ -76,8 +80,14 @@ impl RssFeed {
             }
         }
 
-        match (title, description) {
-            (Some(title), Some(description)) => Ok(RssChannel {
+        match (title, description, itunes_description) {
+            (Some(title), _, Some(description)) => Ok(RssChannel {
+                title,
+                description,
+                image,
+                items,
+            }),
+            (Some(title), Some(description), None) => Ok(RssChannel {
                 title,
                 description,
                 image,
