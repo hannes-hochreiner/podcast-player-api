@@ -30,7 +30,7 @@ impl Repo {
         match update_ts.as_ref() {
             Some(update) => {
                 self.client
-                    .query("SELECT * FROM feeds WHERE update_ts >= $1", &[update])
+                    .query("SELECT * FROM feeds WHERE update_ts > $1", &[update])
                     .await?
             }
             None => self.client.query("SELECT * FROM feeds", &[]).await?,
@@ -97,7 +97,7 @@ impl Repo {
         match since {
             Some(s) => {
                 self.client
-                    .query("SELECT * FROM channels WHERE update_ts >= $1", &[&s])
+                    .query("SELECT * FROM channels WHERE update_ts > $1", &[&s])
                     .await?
             }
             None => self.client.query("SELECT * FROM channels", &[]).await?,
@@ -135,7 +135,7 @@ impl Repo {
         match since {
             Some(s) => {
                 self.client
-                    .query("SELECT * FROM items WHERE update_ts >= $1", &[&s])
+                    .query("SELECT * FROM items WHERE update_ts > $1", &[&s])
                     .await?
             }
             None => self.client.query("SELECT * FROM items", &[]).await?,
