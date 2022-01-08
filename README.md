@@ -1,3 +1,4 @@
+[![CI](https://github.com/hannes-hochreiner/podcast-player-api/actions/workflows/main.yml/badge.svg)](https://github.com/hannes-hochreiner/podcast-player-api/actions/workflows/main.yml)
 # Podcast Player API
 A simple RSS to JSON web service created as part of the [Podcast Player](https://github.com/hannes-hochreiner/podcast-player) project.
 
