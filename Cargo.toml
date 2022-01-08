@@ -22,5 +22,8 @@ log = "0"
 env_logger = "0"
 podcast-player-common = { path="../podcast-player-common", features=["tokio-postgres"] }
 
+[patch.crates-io]
+podcast-player-common = { git = 'https://github.com/hannes-hochreiner/podcast-player-common' }
+
 [package.metadata.release]
 publish = false
