@@ -1,27 +1,63 @@
-CREATE TABLE feeds (
+CREATE TABLE feed (
   id uuid PRIMARY KEY,
-  url varchar(1024) UNIQUE NOT NULL,
+  title varchar(1024) UNIQUE NOT NULL,
   update_ts timestamp with time zone NOT NULL
 );
 
-CREATE TABLE channels (
+CREATE TABLE feed_url (
+  id uuid PRIMARY KEY,
+  url varchar(1024) UNIQUE NOT NULL,
+  feed_id uuid REFERENCES feed (id) NOT NULL,
+  manual boolean NOT NULL,
+  status int,
+  update_ts timestamp with time zone NOT NULL
+);
+
+CREATE TABLE channel (
   id uuid PRIMARY KEY,
   title varchar(512) UNIQUE NOT NULL,
   description varchar(2048) NOT NULL,
   image varchar(1024),
-  feed_id uuid REFERENCES feeds (id),
+  feed_id uuid REFERENCES feed (id) NOT NULL,
   update_ts timestamp with time zone NOT NULL
 );
 
-CREATE TABLE items (
+CREATE TABLE channel_meta (
+  user_id varchar(512),
+  id uuid PRIMARY KEY,
+  channel_id uuid REFERENCES channel (id) NOT NULL,
+  active boolean NOT NULL,
+  synced boolean NOT NULL,
+  volume float NOT NULL,
+  playback_rate float NOT NULL,
+  update_ts timestamp with time zone NOT NULL
+);
+
+CREATE TABLE item (
   id uuid PRIMARY KEY,
   title varchar(512) NOT NULL,
   date timestamp with time zone NOT NULL,
   enclosure_type varchar(128) NOT NULL,
   enclosure_url varchar(1024) NOT NULL,
-  channel_id uuid REFERENCES channels (id),
+  channel_id uuid REFERENCES channel (id) NOT NULL,
+  size int NOT NULL,
   update_ts timestamp with time zone NOT NULL
 );
+
+CREATE TYPE download_status AS ENUM ('NotRequested', 'Pending', 'InProgress', 'Ok', 'Error');
+
+CREATE TABLE item_meta {
+  user_id varchar(512),
+  id uuid PRIMARY KEY,
+  item_id uuid REFERENCES item (id) NOT NULL,
+  new boolean NOT NULL,
+  download boolean NOT NULL,
+  download_status download_status NOT NULL,
+  current_time float,
+  play_count int NOT NULL,
+  synced boolean NOT NULL,
+  update_ts timestamp with time zone NOT NULL
+}
 
 CREATE FUNCTION set_update_timestamp() RETURNS trigger AS $$
 BEGIN
@@ -30,44 +66,56 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER insert_timestamp_items
-BEFORE INSERT ON items
+CREATE TRIGGER insert_timestamp_item
+BEFORE INSERT ON item
 FOR EACH ROW 
 EXECUTE PROCEDURE set_update_timestamp();
 
-CREATE TRIGGER update_timestamp_items
-BEFORE UPDATE ON items
+CREATE TRIGGER update_timestamp_item
+BEFORE UPDATE ON item
 FOR EACH ROW 
 EXECUTE PROCEDURE set_update_timestamp();
 
-CREATE TRIGGER insert_timestamp_channels
-BEFORE INSERT ON channels
+CREATE TRIGGER insert_timestamp_channel
+BEFORE INSERT ON channel
 FOR EACH ROW 
 EXECUTE PROCEDURE set_update_timestamp();
 
-CREATE TRIGGER update_timestamp_channels
-BEFORE UPDATE ON channels
+CREATE TRIGGER update_timestamp_channel
+BEFORE UPDATE ON channel
 FOR EACH ROW 
 EXECUTE PROCEDURE set_update_timestamp();
 
-CREATE TRIGGER insert_timestamp_feeds
-BEFORE INSERT ON feeds
+CREATE TRIGGER insert_timestamp_feed
+BEFORE INSERT ON feed
 FOR EACH ROW 
 EXECUTE PROCEDURE set_update_timestamp();
 
-CREATE TRIGGER update_timestamp_feeds
-BEFORE UPDATE ON feeds
+CREATE TRIGGER update_timestamp_feed
+BEFORE UPDATE ON feed
 FOR EACH ROW 
 EXECUTE PROCEDURE set_update_timestamp();
 
-CREATE ROLE updater LOGIN PASSWORD '{{updater_password}}';
+CREATE TRIGGER insert_timestamp_feed_url
+BEFORE INSERT ON feed_url
+FOR EACH ROW 
+EXECUTE PROCEDURE set_update_timestamp();
 
-GRANT SELECT, INSERT, UPDATE ON feeds TO updater;
-GRANT SELECT, INSERT, UPDATE ON channels TO updater;
-GRANT SELECT, INSERT, UPDATE ON items TO updater;
+CREATE TRIGGER update_timestamp_feed_url
+BEFORE UPDATE ON feed_url
+FOR EACH ROW 
+EXECUTE PROCEDURE set_update_timestamp();
 
-CREATE ROLE rss_json_service LOGIN PASSWORD '{{service_password}}';
+CREATE ROLE api_updater LOGIN PASSWORD '{{updater_password}}';
 
-GRANT SELECT, INSERT ON feeds TO rss_json_service;
-GRANT SELECT ON channels TO rss_json_service;
-GRANT SELECT ON items TO rss_json_service;
+GRANT SELECT, INSERT, UPDATE ON feed TO api_updater;
+GRANT SELECT, INSERT, UPDATE ON feed_url TO api_updater;
+GRANT SELECT, INSERT, UPDATE ON channel TO api_updater;
+GRANT SELECT, INSERT, UPDATE ON item TO api_updater;
+
+CREATE ROLE api_service LOGIN PASSWORD '{{service_password}}';
+
+GRANT SELECT ON channel TO api_service;
+GRANT SELECT ON item TO api_service;
+GRANT SELECT, INSERT, UPDATE ON channel_meta TO api_service;
+GRANT SELECT, INSERT, UPDATE ON item_meta TO api_service;
