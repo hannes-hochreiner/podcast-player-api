@@ -1,6 +1,7 @@
 CREATE TABLE feed (
   id uuid PRIMARY KEY,
   title varchar(1024) UNIQUE NOT NULL,
+  synced boolean NOT NULL,
   update_ts timestamp with time zone NOT NULL
 );
 
@@ -10,6 +11,7 @@ CREATE TABLE feed_url (
   feed_id uuid REFERENCES feed (id) NOT NULL,
   manual boolean NOT NULL,
   status int,
+  synced boolean NOT NULL,
   update_ts timestamp with time zone NOT NULL
 );
 
@@ -117,5 +119,7 @@ CREATE ROLE api_service LOGIN PASSWORD '{{service_password}}';
 
 GRANT SELECT ON channel TO api_service;
 GRANT SELECT ON item TO api_service;
+GRANT SELECT ON feed TO api_service;
+GRANT SELECT ON feed_url TO api_service;
 GRANT SELECT, INSERT, UPDATE ON channel_meta TO api_service;
 GRANT SELECT, INSERT, UPDATE ON item_meta TO api_service;
