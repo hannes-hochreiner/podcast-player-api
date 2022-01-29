@@ -19,7 +19,7 @@ pub struct RssChannel {
 struct RssEnclosure {
     url: String,
     mime_type: String,
-    length: i32,
+    length: i64,
 }
 
 struct RssItem {
