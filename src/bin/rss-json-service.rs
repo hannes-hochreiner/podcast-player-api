@@ -1,18 +1,10 @@
 #[macro_use]
 extern crate rocket;
 extern crate podcast_player_api;
-use anyhow::Context;
-use chrono::DateTime;
-use hyper::{body::Bytes, body::HttpBody as _, header::ToStrError, http::uri::InvalidUri};
-use log::error;
-use podcast_player_api::{fetcher, repo::Repo, updater::Updater};
-use podcast_player_common::{
-    channel_val::ChannelVal as Channel, feed_val::FeedVal as Feed, item_val::ItemVal as Item,
-};
-use rocket::{
-    http::Status, response, response::stream::ByteStream, response::Responder, serde::json::Json,
-    Request, State,
-};
+use hyper::{body::Bytes, body::HttpBody as _};
+use podcast_player_api::{fetcher, repo::Repo, updater::Updater, CustomError};
+use podcast_player_common::{channel_val::ChannelVal, item_val::ItemVal, FeedVal};
+use rocket::{response::stream::ByteStream, serde::json::Json, State};
 use serde::Deserialize;
 use std::{env, str};
 use tokio::{
@@ -30,56 +22,26 @@ pub struct PodcastPlayerApiConfig {
 const TIMEOUT: Duration = Duration::from_secs(3);
 
 #[get("/feeds?<since>")]
-async fn get_feeds(
-    repo: &State<Repo>,
-    since: Option<String>,
-) -> Result<Json<Vec<Feed>>, CustomError> {
-    match since {
-        Some(s) => Ok(Json(
-            repo.get_feeds(Some(
-                DateTime::parse_from_rfc3339(&s)
-                    .context(format!("could not parse filter date \"{}\"", s))?,
-            ))
-            .await?,
-        )),
-        None => Ok(Json(repo.get_feeds(None).await?)),
-    }
+async fn feeds(repo: &State<Repo>, since: Option<&str>) -> Result<Json<Vec<FeedVal>>, CustomError> {
+    Ok(Json(repo.get_objects::<FeedVal>(since).await?))
 }
 
-#[post("/feeds", data = "<url>")]
-async fn post_feeds(repo: &State<Repo>, url: String) -> Result<Json<Feed>, CustomError> {
-    Ok(Json(repo.create_feed(&url).await?))
-}
+// #[post("/feeds", data = "<url>")]
+// async fn post_feeds(repo: &State<Repo>, url: String) -> Result<Json<Feed>, CustomError> {
+//     Ok(Json(repo.create_feed(&url).await?))
+// }
 
 #[get("/channels?<since>")]
 async fn channels(
     repo: &State<Repo>,
-    since: Option<String>,
-) -> Result<Json<Vec<Channel>>, CustomError> {
-    match since {
-        Some(s) => Ok(Json(
-            repo.get_all_channels(Some(
-                DateTime::parse_from_rfc3339(&s)
-                    .context(format!("could not parse filter date \"{}\"", s))?,
-            ))
-            .await?,
-        )),
-        None => Ok(Json(repo.get_all_channels(None).await?)),
-    }
+    since: Option<&str>,
+) -> Result<Json<Vec<ChannelVal>>, CustomError> {
+    Ok(Json(repo.get_objects::<ChannelVal>(since).await?))
 }
 
 #[get("/items?<since>")]
-async fn items(repo: &State<Repo>, since: Option<String>) -> Result<Json<Vec<Item>>, CustomError> {
-    match since {
-        Some(s) => Ok(Json(
-            repo.get_all_items(Some(
-                DateTime::parse_from_rfc3339(&s)
-                    .context(format!("could not parse filter date \"{}\"", s))?,
-            ))
-            .await?,
-        )),
-        None => Ok(Json(repo.get_all_items(None).await?)),
-    }
+async fn items(repo: &State<Repo>, since: Option<&str>) -> Result<Json<Vec<ItemVal>>, CustomError> {
+    Ok(Json(repo.get_objects::<ItemVal>(since).await?))
 }
 
 #[get("/items/<item_id>/stream")]
@@ -90,7 +52,8 @@ async fn item_stream(repo: &State<Repo>, item_id: &str) -> Result<ByteStream![By
     let mut res = fetcher::request(&item.enclosure_url, &TIMEOUT)
         .await
         .unwrap()
-        .0;
+        .0
+        .ok_or(anyhow::anyhow!("request failed"))?;
 
     Ok(ByteStream! {
         while let Some(next) = res.data().await {
@@ -127,57 +90,6 @@ async fn rocket() -> _ {
 
     rocket::build().manage(repo).mount(
         "/",
-        routes![channels, items, item_stream, get_feeds, post_feeds],
+        routes![channels, items, item_stream, feeds], //, post_feeds],
     )
-}
-
-struct CustomError {
-    msg: String,
-}
-
-impl<'r, 'o: 'r> Responder<'r, 'o> for CustomError {
-    fn respond_to(self, _: &'r Request<'_>) -> response::Result<'o> {
-        error!("{}", self.msg);
-        Err(Status::InternalServerError)
-    }
-}
-
-impl std::convert::From<anyhow::Error> for CustomError {
-    fn from(e: anyhow::Error) -> Self {
-        CustomError {
-            msg: format!("{}", e),
-        }
-    }
-}
-
-impl std::convert::From<uuid::Error> for CustomError {
-    fn from(e: uuid::Error) -> Self {
-        CustomError {
-            msg: format!("{}", e),
-        }
-    }
-}
-
-impl std::convert::From<ToStrError> for CustomError {
-    fn from(e: ToStrError) -> Self {
-        CustomError {
-            msg: format!("{}", e),
-        }
-    }
-}
-
-impl std::convert::From<InvalidUri> for CustomError {
-    fn from(e: InvalidUri) -> Self {
-        CustomError {
-            msg: format!("{}", e),
-        }
-    }
-}
-
-impl std::convert::From<hyper::Error> for CustomError {
-    fn from(e: hyper::Error) -> Self {
-        CustomError {
-            msg: format!("{}", e),
-        }
-    }
 }

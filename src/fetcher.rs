@@ -3,30 +3,29 @@ use hyper::{client::HttpConnector, Body, Client, Response, StatusCode};
 use hyper_tls::HttpsConnector;
 use tokio::time::{self, Duration};
 
-pub async fn request(url: &str, timeout: &Duration) -> Result<(Response<Body>, Option<String>)> {
+pub async fn request(
+    url: &str,
+    timeout: &Duration,
+) -> Result<(Option<Response<Body>>, Vec<(String, i16)>)> {
+    let mut urls: Vec<(String, i16)> = Vec::new();
     let mut res = time::timeout(*timeout, internal_request(url)).await??;
-    let mut new_url = None;
+    urls.push((url.into(), res.status().as_u16() as i16));
 
     while (res.status() == StatusCode::TEMPORARY_REDIRECT)
         || (res.status() == StatusCode::FOUND)
         || (res.status() == StatusCode::PERMANENT_REDIRECT)
         || (res.status() == StatusCode::MOVED_PERMANENTLY)
     {
-        let next_url = res.headers()["location"].to_str()?;
+        let next_url = res.headers()["location"].to_str()?.to_string();
 
-        if (res.status() == StatusCode::PERMANENT_REDIRECT)
-            || (res.status() == StatusCode::MOVED_PERMANENTLY)
-        {
-            new_url = Some(String::from(next_url));
-        }
-
-        res = time::timeout(*timeout, internal_request(next_url)).await??;
+        res = time::timeout(*timeout, internal_request(&*next_url)).await??;
+        urls.push((next_url.into(), res.status().as_u16() as i16));
     }
 
     if res.status() == StatusCode::OK {
-        Ok((res, new_url))
+        Ok((Some(res), urls))
     } else {
-        Err(anyhow!(format!("request of \"{}\" failed", url)))
+        Ok((None, urls))
     }
 }
 

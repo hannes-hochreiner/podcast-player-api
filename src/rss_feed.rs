@@ -23,7 +23,7 @@ pub struct RssChannel {
 pub struct RssEnclosure {
     pub url: String,
     pub mime_type: String,
-    pub length: i32,
+    pub length: i64,
 }
 
 #[derive(Debug, PartialEq)]
@@ -159,7 +159,7 @@ impl RssFeed {
             (Some(url), Some(mime_type), Some(length)) => Ok(RssEnclosure {
                 url: String::from(url),
                 mime_type: String::from(mime_type),
-                length: i32::from_str_radix(length, 10)?,
+                length: i64::from_str_radix(length, 10)?,
             }),
             _ => Err(anyhow::Error::msg("could not parse enclosure")),
         }

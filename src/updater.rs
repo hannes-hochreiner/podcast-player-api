@@ -1,8 +1,11 @@
 use crate::{fetcher::request, repo::Repo, rss_feed::RssFeed};
 use anyhow::Result;
+use chrono::Utc;
+use hyper::{Body, Response};
 use log::{error, info, warn};
-use podcast_player_common::feed_val::FeedVal;
+use podcast_player_common::{FeedUrl, FeedVal};
 use tokio::time::{sleep, Duration};
+use uuid::Uuid;
 
 const TIMEOUT: Duration = Duration::from_secs(3);
 
@@ -38,14 +41,13 @@ impl Updater {
             }
         }?;
 
-        let feeds = repo.get_feeds(None).await?;
+        let feeds = repo.get_objects::<FeedVal>(None).await?;
 
-        for db_feed in feeds {
-            let feed_url = db_feed.url.clone();
-
-            match process_feed(&db_feed, &repo).await {
-                Ok(_) => info!("successfully parsed \"{}\"", feed_url),
-                Err(e) => error!("error parsing \"{}\": {}", feed_url, e),
+        for feed in feeds {
+            let title = feed.title.clone();
+            match process_feed(&feed, &repo).await {
+                Ok(_) => info!("successfully parsed \"{}\"", title),
+                Err(e) => error!("error parsing \"{}\": {}", title, e),
             }
         }
 
@@ -54,18 +56,10 @@ impl Updater {
 }
 
 async fn process_feed(db_feed: &FeedVal, repo: &Repo) -> Result<()> {
-    let res = request(&db_feed.url, &TIMEOUT).await?;
-
-    if let Some(new_url) = &res.1 {
-        let mut updated_feed = db_feed.clone();
-
-        updated_feed.url = new_url.clone();
-
-        repo.update_feed(&updated_feed).await?;
-    }
+    let res = get_feed_response(db_feed, repo).await?;
 
     // Concatenate the body stream into a single buffer...
-    let buf = hyper::body::to_bytes(res.0).await?;
+    let buf = hyper::body::to_bytes(res).await?;
     let rss_feed = RssFeed::try_from(std::str::from_utf8(&buf)?)?;
 
     for rss_channel in &rss_feed.channels {
@@ -119,6 +113,7 @@ async fn process_feed(db_feed: &FeedVal, repo: &Repo) -> Result<()> {
                         &*rss_item.enclosure.mime_type,
                         &*rss_item.enclosure.url,
                         &db_channel.id,
+                        rss_item.enclosure.length,
                     )
                     .await?;
                 }
@@ -127,4 +122,65 @@ async fn process_feed(db_feed: &FeedVal, repo: &Repo) -> Result<()> {
     }
 
     Ok(())
+}
+
+async fn get_feed_response(db_feed: &FeedVal, repo: &Repo) -> Result<Response<Body>> {
+    let mut feed_urls = repo.get_urls_by_feed_id(&db_feed.id).await?;
+
+    feed_urls.sort();
+
+    let mut feed_url_ids = feed_urls.iter().map(|fu| fu.id).collect::<Vec<Uuid>>();
+
+    while feed_url_ids.len() > 0 {
+        // find first url, which has not been tried
+        match feed_urls.iter().find(|&fu| feed_url_ids.contains(&fu.id)) {
+            Some(feed_url) => {
+                let res = request(&feed_url.url, &TIMEOUT).await?;
+
+                for (res_url, res_status) in res.1 {
+                    // check whether the url is in the repo
+                    match feed_urls.iter().find(|&f| f.url == res_url) {
+                        Some(fu) => {
+                            // remove url from map
+                            feed_url_ids.retain(|&id| id != fu.id);
+                            // update if url is in repo
+                            let mut new_fu = fu.clone();
+
+                            new_fu.status = Some(res_status);
+                            new_fu.update_ts = Utc::now().into();
+                            repo.update_feed_url(&new_fu).await?;
+                        }
+                        None => {
+                            // add if not
+                            repo.create_feed_url(&FeedUrl {
+                                feed_id: db_feed.id,
+                                id: Uuid::new_v4(),
+                                manual: false,
+                                status: Some(res_status),
+                                synced: false,
+                                update_ts: Utc::now().into(),
+                                url: res_url,
+                            })
+                            .await?;
+                        }
+                    }
+                }
+
+                if let Some(resp) = res.0 {
+                    return Ok(resp);
+                }
+            }
+            None => {
+                // should not happen, as long as there is an id in the id vector, it should also be in the url vector
+                return Err(anyhow::anyhow!(
+                    "unexpected result in processing the urls of feed \"{}\"",
+                    db_feed.title
+                ));
+            }
+        }
+    }
+
+    Err(anyhow::anyhow!(
+        "none of the urls for the feed was retrievable"
+    ))
 }
