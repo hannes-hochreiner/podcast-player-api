@@ -38,14 +38,14 @@ impl Repo {
             Some(update) => {
                 self.client
                     .query(
-                        &format!("SELECT * FROM {} WHERE update_ts > $1", T::table_name()),
+                        &*format!("SELECT * FROM {} WHERE update_ts > $1", T::table_name()),
                         &[update],
                     )
                     .await?
             }
             None => {
                 self.client
-                    .query(&format!("SELECT * FROM {}", T::table_name()), &[])
+                    .query(&*format!("SELECT * FROM {}", T::table_name()), &[])
                     .await?
             }
         }
