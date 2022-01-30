@@ -10,7 +10,7 @@ CREATE TABLE feed_url (
   url varchar(1024) UNIQUE NOT NULL,
   feed_id uuid REFERENCES feed_val (id) NOT NULL,
   manual boolean NOT NULL,
-  status int,
+  status SMALLINT,
   synced boolean NOT NULL,
   update_ts timestamp with time zone NOT NULL
 );
