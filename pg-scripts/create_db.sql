@@ -59,7 +59,7 @@ CREATE TABLE item_meta {
   play_count int NOT NULL,
   synced boolean NOT NULL,
   update_ts timestamp with time zone NOT NULL
-}
+};
 
 CREATE FUNCTION set_update_timestamp() RETURNS trigger AS $$
 BEGIN
