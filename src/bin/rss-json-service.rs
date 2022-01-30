@@ -77,8 +77,8 @@ async fn rocket() -> _ {
     let repo = match Repo::new(&config.api_connection).await {
         Ok(rep) => Ok(rep),
         Err(e) => {
-            log::warn!("error creating repo; waiting 5s before retry: {}", e);
-            sleep(Duration::from_secs(5)).await;
+            log::warn!("error creating repo; waiting 10s before retry: {}", e);
+            sleep(Duration::from_secs(10)).await;
             Repo::new(&config.api_connection).await
         }
     }
