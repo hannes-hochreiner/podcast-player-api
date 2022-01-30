@@ -1,6 +1,6 @@
 [package]
 name = "podcast-player-api"
-version = "2.2.0"
+version = "2.3.0"
 authors = ["Hannes Hochreiner <hannes@hochreiner.net>"]
 edition = "2021"
 
