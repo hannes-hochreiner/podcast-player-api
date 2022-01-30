@@ -42,7 +42,7 @@ CREATE TABLE item_val (
   enclosure_type varchar(128) NOT NULL,
   enclosure_url varchar(1024) NOT NULL,
   channel_id uuid REFERENCES channel_val (id) NOT NULL,
-  size int NOT NULL,
+  size BIGINT NOT NULL,
   update_ts timestamp with time zone NOT NULL
 );
 
