@@ -48,18 +48,18 @@ CREATE TABLE item_val (
 
 CREATE TYPE download_status AS ENUM ('NotRequested', 'Pending', 'InProgress', 'Ok', 'Error');
 
-CREATE TABLE item_meta {
+CREATE TABLE item_meta (
   user_id varchar(512),
   id uuid PRIMARY KEY,
   item_id uuid REFERENCES item_val (id) NOT NULL,
   new boolean NOT NULL,
   download boolean NOT NULL,
   download_status download_status NOT NULL,
-  current_time float,
+  playback_time float,
   play_count int NOT NULL,
   synced boolean NOT NULL,
   update_ts timestamp with time zone NOT NULL
-};
+);
 
 CREATE FUNCTION set_update_timestamp() RETURNS trigger AS $$
 BEGIN
