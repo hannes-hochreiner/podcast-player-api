@@ -35,8 +35,8 @@ impl Updater {
         let repo = match Repo::new(&self.connection).await {
             Ok(rep) => Ok(rep),
             Err(e) => {
-                warn!("error creating repo; waiting 3s before retry: {}", e);
-                sleep(Duration::from_secs(3)).await;
+                warn!("error creating repo; waiting 5s before retry: {}", e);
+                sleep(Duration::from_secs(5)).await;
                 Repo::new(&self.connection).await
             }
         }?;
