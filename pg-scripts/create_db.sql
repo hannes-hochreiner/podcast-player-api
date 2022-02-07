@@ -53,7 +53,6 @@ CREATE TABLE item_meta (
   id uuid PRIMARY KEY,
   item_id uuid REFERENCES item_val (id) NOT NULL,
   new boolean NOT NULL,
-  download boolean NOT NULL,
   download_status download_status NOT NULL,
   playback_time float,
   play_count int NOT NULL,
