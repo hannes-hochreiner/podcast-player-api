@@ -94,9 +94,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 
     let repo = Repo::new(&config.api_connection).await?;
 
-    // let updater = Updater::new(&config.updater_connection);
+    let updater = Updater::new(&config.updater_connection);
 
-    // spawn(async move { updater.update_loop().await });
+    spawn(async move { updater.update_loop().await });
 
     /// TODO: make socket address configurable
     let addr = ([127, 0, 0, 1], 3000).into();
