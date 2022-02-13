@@ -1,7 +1,7 @@
 use crate::{fetcher::request, repo::Repo, rss_feed::RssFeed};
 use anyhow::Result;
 use chrono::Utc;
-use hyper::{Body, Response};
+use hyper::{Body, Method, Response};
 use log::{error, info, warn};
 use podcast_player_common::{FeedUrl, FeedVal};
 use tokio::time::{sleep, Duration};
@@ -135,7 +135,7 @@ async fn get_feed_response(db_feed: &FeedVal, repo: &Repo) -> Result<Response<Bo
         // find first url, which has not been tried
         match feed_urls.iter().find(|&fu| feed_url_ids.contains(&fu.id)) {
             Some(feed_url) => {
-                let res = request(&feed_url.url, &TIMEOUT).await?;
+                let res = request(&feed_url.url, &TIMEOUT, &Method::GET).await?;
 
                 for (res_url, res_status) in res.1 {
                     // check whether the url is in the repo

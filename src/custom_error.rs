@@ -1,20 +1,7 @@
 use hyper::{header::ToStrError, http::uri::InvalidUri};
-use log::error;
-use rocket::{
-    http::Status,
-    response::{self, Responder},
-    Request,
-};
 
 pub struct CustomError {
     msg: String,
-}
-
-impl<'r, 'o: 'r> Responder<'r, 'o> for CustomError {
-    fn respond_to(self, _: &'r Request<'_>) -> response::Result<'o> {
-        error!("{}", self.msg);
-        Err(Status::InternalServerError)
-    }
 }
 
 impl std::convert::From<anyhow::Error> for CustomError {

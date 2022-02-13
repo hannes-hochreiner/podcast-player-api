@@ -1,11 +1,10 @@
-#[macro_use]
-extern crate rocket;
 extern crate podcast_player_api;
-use hyper::{body::Bytes, body::HttpBody as _};
+use hyper::service::{make_service_fn, service_fn};
+use hyper::{Body, Method, Request, Response, Server, StatusCode};
 use podcast_player_api::{fetcher, repo::Repo, updater::Updater, CustomError};
 use podcast_player_common::{channel_val::ChannelVal, item_val::ItemVal, FeedVal};
-use rocket::{response::stream::ByteStream, serde::json::Json, State};
 use serde::Deserialize;
+use std::collections::HashMap;
 use std::{env, str};
 use tokio::{
     fs, spawn,
@@ -21,50 +20,69 @@ pub struct PodcastPlayerApiConfig {
 
 const TIMEOUT: Duration = Duration::from_secs(3);
 
-#[get("/feeds?<since>")]
-async fn feeds(repo: &State<Repo>, since: Option<&str>) -> Result<Json<Vec<FeedVal>>, CustomError> {
-    Ok(Json(repo.get_objects::<FeedVal>(since).await?))
-}
+async fn router(req: Request<Body>, repo: Repo) -> Result<Response<Body>, anyhow::Error> {
+    let path = req.uri().path().split("/").collect::<Vec<&str>>();
+    let query = req
+        .uri()
+        .query()
+        .and_then(|s| {
+            Some(
+                s.split("&")
+                    .map(|sub| {
+                        let mut split = sub.split("=");
+                        (
+                            split
+                                .nth(0)
+                                .ok_or(anyhow::anyhow!("could not parse query string")),
+                            split
+                                .nth(0)
+                                .ok_or(anyhow::anyhow!("could not parse query string")),
+                        )
+                    })
+                    .map(|t| match (t.0, t.1) {
+                        (Ok(key), Ok(val)) => Ok((key, val)),
+                        (_, Err(e)) => Err(e),
+                        (Err(e), _) => Err(e),
+                    })
+                    .collect::<Result<HashMap<&str, &str>, anyhow::Error>>(),
+            )
+        })
+        .transpose()?;
 
-// #[post("/feeds", data = "<url>")]
-// async fn post_feeds(repo: &State<Repo>, url: String) -> Result<Json<Feed>, CustomError> {
-//     Ok(Json(repo.create_feed(&url).await?))
-// }
+    match (req.method(), &path[1..]) {
+        (&Method::GET, &["feeds"]) => Ok(Response::new(Body::from(serde_json::to_string(
+            &repo
+                .get_objects::<FeedVal>(query.and_then(|q| q.get(&"since").cloned()))
+                .await?,
+        )?))),
+        (&Method::GET, &["channels"]) => Ok(Response::new(Body::from(serde_json::to_string(
+            &repo
+                .get_objects::<ChannelVal>(query.and_then(|q| q.get(&"since").cloned()))
+                .await?,
+        )?))),
+        (&Method::GET, &["items"]) => Ok(Response::new(Body::from(serde_json::to_string(
+            &repo
+                .get_objects::<ItemVal>(query.and_then(|q| q.get(&"since").cloned()))
+                .await?,
+        )?))),
+        (&Method::GET | &Method::HEAD, &["items", id, "stream"]) => {
+            let item = repo.get_item_by_id(&id.parse()?).await?;
 
-#[get("/channels?<since>")]
-async fn channels(
-    repo: &State<Repo>,
-    since: Option<&str>,
-) -> Result<Json<Vec<ChannelVal>>, CustomError> {
-    Ok(Json(repo.get_objects::<ChannelVal>(since).await?))
-}
-
-#[get("/items?<since>")]
-async fn items(repo: &State<Repo>, since: Option<&str>) -> Result<Json<Vec<ItemVal>>, CustomError> {
-    Ok(Json(repo.get_objects::<ItemVal>(since).await?))
-}
-
-#[get("/items/<item_id>/stream")]
-async fn item_stream(repo: &State<Repo>, item_id: &str) -> Result<ByteStream![Bytes], CustomError> {
-    let item_id = Uuid::parse_str(item_id)?;
-    let item = repo.get_item_by_id(&item_id).await?;
-
-    let mut res = fetcher::request(&item.enclosure_url, &TIMEOUT)
-        .await
-        .unwrap()
-        .0
-        .ok_or(anyhow::anyhow!("request failed"))?;
-
-    Ok(ByteStream! {
-        while let Some(next) = res.data().await {
-            let chunk = next.unwrap();
-            yield chunk;
+            fetcher::request(&*item.enclosure_url, &TIMEOUT, &req.method())
+                .await?
+                .0
+                .ok_or(anyhow::anyhow!("error requesting enclosure"))
         }
-    })
+        _ => {
+            let mut not_found = Response::default();
+            *not_found.status_mut() = StatusCode::NOT_FOUND;
+            Ok(not_found)
+        }
+    }
 }
 
-#[launch]
-async fn rocket() -> _ {
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     env_logger::init();
 
     let config: PodcastPlayerApiConfig = serde_json::from_str(
@@ -74,22 +92,23 @@ async fn rocket() -> _ {
     )
     .unwrap();
 
-    let repo = match Repo::new(&config.api_connection).await {
-        Ok(rep) => Ok(rep),
-        Err(e) => {
-            log::warn!("error creating repo; waiting 10s before retry: {}", e);
-            sleep(Duration::from_secs(10)).await;
-            Repo::new(&config.api_connection).await
-        }
-    }
-    .unwrap();
+    let repo = Repo::new(&config.api_connection).await?;
 
-    let updater = Updater::new(&config.updater_connection);
+    // let updater = Updater::new(&config.updater_connection);
 
-    spawn(async move { updater.update_loop().await });
+    // spawn(async move { updater.update_loop().await });
 
-    rocket::build().manage(repo).mount(
-        "/",
-        routes![channels, items, item_stream, feeds], //, post_feeds],
-    )
+    /// TODO: make socket address configurable
+    let addr = ([127, 0, 0, 1], 3000).into();
+    let service = make_service_fn(|_| {
+        let repo = repo.clone();
+        async { Ok::<_, anyhow::Error>(service_fn(move |req| router(req, repo.to_owned()))) }
+    });
+    let server = Server::bind(&addr).serve(service);
+
+    println!("Listening on http://{}", addr);
+
+    server.await?;
+
+    Ok(())
 }
