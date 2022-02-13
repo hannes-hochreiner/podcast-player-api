@@ -8,6 +8,7 @@ use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::{env, str};
 use tokio::{fs, spawn, time::Duration};
+use url::Url;
 
 #[derive(Debug, Deserialize)]
 pub struct PodcastPlayerApiConfig {
@@ -19,48 +20,21 @@ const TIMEOUT: Duration = Duration::from_secs(3);
 
 async fn router(req: Request<Body>, repo: Repo) -> Result<Response<Body>, anyhow::Error> {
     let path = req.uri().path().split("/").collect::<Vec<&str>>();
-    let query = req
-        .uri()
-        .query()
-        .and_then(|s| {
-            Some(
-                s.split("&")
-                    .map(|sub| {
-                        let mut split = sub.split("=");
-                        (
-                            split
-                                .nth(0)
-                                .ok_or(anyhow::anyhow!("could not parse query string")),
-                            split
-                                .nth(0)
-                                .ok_or(anyhow::anyhow!("could not parse query string")),
-                        )
-                    })
-                    .map(|t| match (t.0, t.1) {
-                        (Ok(key), Ok(val)) => Ok((key, val)),
-                        (_, Err(e)) => Err(e),
-                        (Err(e), _) => Err(e),
-                    })
-                    .collect::<Result<HashMap<&str, &str>, anyhow::Error>>(),
-            )
-        })
-        .transpose()?;
+    let query = Url::parse(&format!("http://dummy.com{}", req.uri().to_string()))?
+        .query_pairs()
+        .into_owned()
+        .collect::<HashMap<String, String>>();
+    let since = query.get("since").and_then(|s| Some(s.as_str()));
 
     match (req.method(), &path[1..]) {
         (&Method::GET, &["feeds"]) => Ok(Response::new(Body::from(serde_json::to_string(
-            &repo
-                .get_objects::<FeedVal>(query.and_then(|q| q.get(&"since").cloned()))
-                .await?,
+            &repo.get_objects::<FeedVal>(since).await?,
         )?))),
         (&Method::GET, &["channels"]) => Ok(Response::new(Body::from(serde_json::to_string(
-            &repo
-                .get_objects::<ChannelVal>(query.and_then(|q| q.get(&"since").cloned()))
-                .await?,
+            &repo.get_objects::<ChannelVal>(since).await?,
         )?))),
         (&Method::GET, &["items"]) => Ok(Response::new(Body::from(serde_json::to_string(
-            &repo
-                .get_objects::<ItemVal>(query.and_then(|q| q.get(&"since").cloned()))
-                .await?,
+            &repo.get_objects::<ItemVal>(since).await?,
         )?))),
         (&Method::GET | &Method::HEAD, &["items", id, "stream"]) => {
             let item = repo.get_item_by_id(&id.parse()?).await?;
