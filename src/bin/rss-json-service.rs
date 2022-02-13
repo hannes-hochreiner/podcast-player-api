@@ -1,7 +1,7 @@
 extern crate podcast_player_api;
 use hyper::service::{make_service_fn, service_fn};
 use hyper::{Body, Method, Request, Response, Server, StatusCode};
-use podcast_player_api::{fetcher, repo::Repo, updater::Updater, CustomError};
+use podcast_player_api::{fetcher, repo::Repo, updater::Updater};
 use podcast_player_common::{channel_val::ChannelVal, item_val::ItemVal, FeedVal};
 use serde::Deserialize;
 use std::collections::HashMap;
