@@ -5,12 +5,9 @@ use podcast_player_api::{fetcher, repo::Repo, updater::Updater};
 use podcast_player_common::{channel_val::ChannelVal, item_val::ItemVal, FeedVal};
 use serde::Deserialize;
 use std::collections::HashMap;
+use std::net::SocketAddr;
 use std::{env, str};
-use tokio::{
-    fs, spawn,
-    time::{sleep, Duration},
-};
-use uuid::Uuid;
+use tokio::{fs, spawn, time::Duration};
 
 #[derive(Debug, Deserialize)]
 pub struct PodcastPlayerApiConfig {
@@ -98,8 +95,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 
     spawn(async move { updater.update_loop().await });
 
-    /// TODO: make socket address configurable
-    let addr = ([127, 0, 0, 1], 3000).into();
+    let addr: SocketAddr = match env::var("HYPER_BIND_ADDRESS") {
+        Ok(s) => s,
+        Err(_) => String::from("127.0.0.1:8000"),
+    }
+    .parse()
+    .unwrap();
     let service = make_service_fn(|_| {
         let repo = repo.clone();
         async { Ok::<_, anyhow::Error>(service_fn(move |req| router(req, repo.to_owned()))) }
