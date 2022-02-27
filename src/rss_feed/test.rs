@@ -171,6 +171,14 @@ fn parse_minkorrekt() {
 }
 
 #[test]
+fn parse_quanta() {
+    let feed = RssFeed::try_from(&*fs::read_to_string("testFiles/quanta.xml").unwrap()).unwrap();
+
+    assert_eq!(feed.channels.len(), 1);
+    assert_eq!(feed.channels[0].items.len(), 5);
+}
+
+#[test]
 fn parse_minkorrekt_missing() {
     let _ = RssFeed::try_from(&*fs::read_to_string("testFiles/minkorrekt_missing.xml").unwrap())
         .unwrap();

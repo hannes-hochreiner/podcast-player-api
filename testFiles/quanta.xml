@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+        xmlns:content="http://purl.org/rss/1.0/modules/content/"
+        xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:atom="http://www.w3.org/2005/Atom"
+        xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+        xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+        xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+xmlns:podcast="https://github.com/Podcastindex-org/podcast-namespace/blob/main/docs/1.0.md"
+xmlns:rawvoice="http://www.rawvoice.com/rawvoiceRssModule/"
+xmlns:googleplay="http://www.google.com/schemas/play-podcasts/1.0"
+>
+    <channel>
+        <title>Quanta Science Podcast</title>
+        <atom:link href="https://api.quantamagazine.org/feed/podcast/" rel="self" type="application/rss+xml"></atom:link>
+                <link>https://www.quantamagazine.org</link>
+        <description>In-depth news about mathematics, physics, biology and computer science. Read more at QuantaMagazine.org.</description>
+        <lastBuildDate>Fri, 25 Feb 2022 16:59:19 +0000</lastBuildDate>
+        <language>en-US</language>
+        <sy:updatePeriod>hourly</sy:updatePeriod>
+        <sy:updateFrequency>1</sy:updateFrequency>
+        <atom:link rel="hub" href="https://pubsubhubbub.appspot.com/" />
+        <itunes:summary>Listen to Quanta Magazine&apos;s in-depth news stories about developments in mathematics, theoretical physics, theoretical computer science and the basic life sciences. Quanta, an editorially independent magazine published by the Simons Foundation, seeks to enhance public understanding of basic research. Read more at QuantaMagazine.org.</itunes:summary>
+        <itunes:author>Quanta Magazine</itunes:author>
+        <itunes:explicit>no</itunes:explicit>
+        <itunes:image href="https://d2r55xnwy6nx47.cloudfront.net/uploads/2017/12/quanta_podcast_logo-1400.png" />
+        <itunes:owner>
+                <itunes:name>Quanta Magazine</itunes:name>
+                <itunes:email>quanta@simonsfoundation.org</itunes:email>
+        </itunes:owner>
+        <managingEditor>quanta@simonsfoundation.org (Quanta Magazine)</managingEditor>
+        <copyright>Quanta Magazine</copyright>
+        <itunes:subtitle>In-depth news about mathematics, physics, biology and computer science.</itunes:subtitle>
+        <image>
+                <title>Quanta Science Podcast</title>
+                <url>https://d2r55xnwy6nx47.cloudfront.net/uploads/2017/12/quanta_podcast_logo-1400.png</url>
+                <link>https://www.quantamagazine.org</link>
+        </image>
+        <itunes:category text="Science">
+                <itunes:category text="Physics" />
+        </itunes:category>
+        <googleplay:category text="Science &amp; Medicine"/>
+        <itunes:category text="Science">
+                <itunes:category text="Life Sciences" />
+        </itunes:category>
+        <rawvoice:rating>TV-G</rawvoice:rating>
+        <rawvoice:location>New York, N.Y.</rawvoice:location>
+        <podcast:location>New York, N.Y.</podcast:location>
+        <rawvoice:frequency>Bi-weekly</rawvoice:frequency>
+        <rawvoice:subscribe feed="https://api.quantamagazine.org/feed/podcast/" itunes="https://itunes.apple.com/us/podcast/quanta-science-podcast/id1021340531?mt=2&amp;ls=1" blubrry="https://blubrry.com/quanta/" stitcher="https://www.stitcher.com/podcast/quanta-magazine-2/quanta-magazine-podcast" tunein="https://tunein.com/podcasts/Science-Podcasts/Quanta-Science-Podcast-p1132792/" spotify="https://open.spotify.com/show/7oKXOpbHzbICFUcJNbZ5wF?si=jdnj9sTHSD2bj4hDMFLKEA"></rawvoice:subscribe>
+<generator>https://wordpress.org/?v=4.9.17</generator>
+        <item>
+            <title>Mathematicians Outwit Hidden Number Conspiracy</title>
+            <link>https://www.quantamagazine.org/mathematicians-outwit-hidden-number-conspiracy-20220103/</link>
+            <pubDate>Thu, 17 Feb 2022 12:00:00 +0000</pubDate>
+            <guid isPermaLink="false">https://www.quantamagazine.org/?p=111477</guid>
+            <description><![CDATA[Decades ago, a mathematician posed a warmup problem for some of the most difficult questions about prime numbers. It turned out to be just as difficult to solve, until now.            <p>The post <a href="https://www.quantamagazine.org/mathematicians-outwit-hidden-number-conspiracy-20220103/" target="_blank">Mathematicians Outwit Hidden Number Conspiracy</a> first appeared on <a href="https://api.quantamagazine.org" target="_blank">Quanta Magazine</a></p>]]></description>
+            <enclosure url="https://chrt.fm/track/C9B4G7//media.blubrry.com/quanta/d2r55xnwy6nx47.cloudfront.net/uploads/2022/02/Quanta-182_Chowla-Conjecture_FINAL.mp3" length="30925931" type="audio/mpeg" />
+            <itunes:title>Mathematicians Outwit Hidden Number Conspiracy</itunes:title>
+            <itunes:subtitle>Decades ago, a mathematician posed a warmup problem for some of the most difficult questions about prime numbers. It turned out to be just as difficult to solve, until now.</itunes:subtitle>
+            <itunes:summary>Decades ago, a mathematician posed a warmup problem for some of the most difficult questions about prime numbers. It turned out to be just as difficult to solve, until now. Read more at QuantaMagazine.org. Music is &quot;Aimless Amos&quot; by Rondo Brothers.</itunes:summary>
+            <itunes:image href="https://d2r55xnwy6nx47.cloudfront.net/uploads/2022/01/Expander-Graph_300.jpg" />
+            <itunes:duration>1288</itunes:duration>
+            <itunes:author>Quanta Magazine</itunes:author>
+            <comments>https://www.quantamagazine.org/mathematicians-outwit-hidden-number-conspiracy-20220103/#respond</comments>
+            <wfw:commentRss>https://www.quantamagazine.org/mathematicians-outwit-hidden-number-conspiracy-20220103/feed/</wfw:commentRss>
+            <slash:comments>0</slash:comments>
+            <category>Mathematics</category>
+            <content:encoded><![CDATA[Decades ago, a mathematician posed a warmup problem for some of the most difficult questions about prime numbers. It turned out to be just as difficult to solve, until now.            <p>The post <a href="https://www.quantamagazine.org/mathematicians-outwit-hidden-number-conspiracy-20220103/" target="_blank">Mathematicians Outwit Hidden Number Conspiracy</a> first appeared on <a href="https://api.quantamagazine.org" target="_blank">Quanta Magazine</a></p>]]></content:encoded>
+            <itunes:explicit>no</itunes:explicit>
+        </item>
+        <item>
+            <title>Mathematician Hurls Structure and Disorder Into Century-Old Problem</title>
+            <link>https://www.quantamagazine.org/oxford-mathematician-advances-century-old-combinatorics-problem-20211215/</link>
+            <pubDate>Thu, 03 Feb 2022 12:00:00 +0000</pubDate>
+            <guid isPermaLink="false">https://www.quantamagazine.org/?p=111195</guid>
+            <description><![CDATA[A new paper shows how to create longer disordered strings than mathematicians had thought possible, proving that a well-known recent conjecture is “spectacularly wrong.”            <p>The post <a href="https://www.quantamagazine.org/oxford-mathematician-advances-century-old-combinatorics-problem-20211215/" target="_blank">Mathematician Hurls Structure and Disorder Into Century-Old Problem</a> first appeared on <a href="https://api.quantamagazine.org" target="_blank">Quanta Magazine</a></p>]]></description>
+            <enclosure url="https://chrt.fm/track/C9B4G7//media.blubrry.com/quanta/d2r55xnwy6nx47.cloudfront.net/uploads/2021/12/Quanta-181_Van-der-Waerden-Coloring_FINAL.mp3" length="24665951" type="audio/mpeg" />
+            <itunes:title>Mathematician Hurls Structure and Disorder Into Century-Old Problem</itunes:title>
+            <itunes:subtitle>A new paper shows how to create longer disordered strings than mathematicians had thought possible, proving that a well-known recent conjecture is &quot;spectacularly wrong.&quot;</itunes:subtitle>
+            <itunes:summary>A new paper shows how to create longer disordered strings than mathematicians had thought possible, proving that a well-known recent conjecture is &quot;spectacularly wrong.&quot; Read more at QuantaMagazine.org. Music is &quot;Transmission&quot; by John Deley and the 41 Players.</itunes:summary>
+            <itunes:image href="https://d2r55xnwy6nx47.cloudfront.net/uploads/2021/12/BeadString-300.jpg" />
+            <itunes:duration>1027</itunes:duration>
+            <itunes:author>Quanta Magazine</itunes:author>
+            <comments>https://www.quantamagazine.org/oxford-mathematician-advances-century-old-combinatorics-problem-20211215/#respond</comments>
+            <wfw:commentRss>https://www.quantamagazine.org/oxford-mathematician-advances-century-old-combinatorics-problem-20211215/feed/</wfw:commentRss>
+            <slash:comments>0</slash:comments>
+            <category>Mathematics</category>
+            <content:encoded><![CDATA[A new paper shows how to create longer disordered strings than mathematicians had thought possible, proving that a well-known recent conjecture is “spectacularly wrong.”            <p>The post <a href="https://www.quantamagazine.org/oxford-mathematician-advances-century-old-combinatorics-problem-20211215/" target="_blank">Mathematician Hurls Structure and Disorder Into Century-Old Problem</a> first appeared on <a href="https://api.quantamagazine.org" target="_blank">Quanta Magazine</a></p>]]></content:encoded>
+            <itunes:explicit>no</itunes:explicit>
+        </item>
+        <item>
+            <title>Researchers Defeat Randomness to Create Ideal Code</title>
+            <link>https://www.quantamagazine.org/researchers-defeat-randomness-to-create-ideal-code-20211124/</link>
+            <pubDate>Thu, 20 Jan 2022 12:00:00 +0000</pubDate>
+            <guid isPermaLink="false">https://www.quantamagazine.org/?p=110607</guid>
+            <description><![CDATA[By carefully constructing a multidimensional and well-connected graph, a team of researchers has finally created a long-sought locally testable code that can immediately betray whether it’s been corrupted.            <p>The post <a href="https://www.quantamagazine.org/researchers-defeat-randomness-to-create-ideal-code-20211124/" target="_blank">Researchers Defeat Randomness to Create Ideal Code</a> first appeared on <a href="https://api.quantamagazine.org" target="_blank">Quanta Magazine</a></p>]]></description>
+            <enclosure url="https://chrt.fm/track/C9B4G7//media.blubrry.com/quanta/d2r55xnwy6nx47.cloudfront.net/uploads/2022/01/Quanta-180_Error-Correcting-Code_FINAL.mp3" length="33943364" type="audio/mpeg" />
+            <itunes:title>Researchers Defeat Randomness to Create Ideal Code</itunes:title>
+            <itunes:subtitle>By carefully constructing a multidimensional and well-connected graph, a team of researchers has finally created a long-sought locally testable code that can immediately betray whether it&apos;s been corrupted.</itunes:subtitle>
+            <itunes:summary>By carefully constructing a multidimensional and well-connected graph, a team of researchers has finally created a long-sought locally testable code that can immediately reveal whether it&apos;s been corrupted. Read more at QuantaMagazine.org. Music is &quot;Clover 3&quot; by Vibe Mountain.</itunes:summary>
+            <itunes:image href="https://d2r55xnwy6nx47.cloudfront.net/uploads/2021/11/Expander-Graphs-Pages_300.jpg" />
+            <itunes:duration>1414</itunes:duration>
+            <itunes:author>Quanta Magazine</itunes:author>
+            <comments>https://www.quantamagazine.org/researchers-defeat-randomness-to-create-ideal-code-20211124/#respond</comments>
+            <wfw:commentRss>https://www.quantamagazine.org/researchers-defeat-randomness-to-create-ideal-code-20211124/feed/</wfw:commentRss>
+            <slash:comments>0</slash:comments>
+            <category>Computer Science</category>
+            <category>Mathematics</category>
+            <content:encoded><![CDATA[By carefully constructing a multidimensional and well-connected graph, a team of researchers has finally created a long-sought locally testable code that can immediately betray whether it’s been corrupted.            <p>The post <a href="https://www.quantamagazine.org/researchers-defeat-randomness-to-create-ideal-code-20211124/" target="_blank">Researchers Defeat Randomness to Create Ideal Code</a> first appeared on <a href="https://api.quantamagazine.org" target="_blank">Quanta Magazine</a></p>]]></content:encoded>
+            <itunes:explicit>no</itunes:explicit>
+        </item>
+        <item>
+            <title>The Brain Processes Speech in Parallel With Other Sounds</title>
+            <link>https://www.quantamagazine.org/the-brain-processes-speech-in-parallel-with-other-sounds-20211021/</link>
+            <pubDate>Thu, 06 Jan 2022 12:00:00 +0000</pubDate>
+            <guid isPermaLink="false">https://www.quantamagazine.org/?p=109625</guid>
+            <description><![CDATA[Scientists thought that the brain’s hearing centers might just process speech along with other sounds. But new work suggests that speech gets some special treatment very early on.            <p>The post <a href="https://www.quantamagazine.org/the-brain-processes-speech-in-parallel-with-other-sounds-20211021/" target="_blank">The Brain Processes Speech in Parallel With Other Sounds</a> first appeared on <a href="https://api.quantamagazine.org" target="_blank">Quanta Magazine</a></p>]]></description>
+            <enclosure url="https://chrt.fm/track/C9B4G7//media.blubrry.com/quanta/d2r55xnwy6nx47.cloudfront.net/uploads/2022/01/Quanta-179_Speech-and-Sound_FINAL.mp3" length="27986235" type="audio/mpeg" />
+            <itunes:title>The Brain Processes Speech in Parallel With Other Sounds</itunes:title>
+            <itunes:subtitle>Scientists thought that the brain&apos;s hearing centers might just process speech along with other sounds. But new work suggests that speech gets some special treatment very early on.</itunes:subtitle>
+            <itunes:summary>Scientists thought that the brain&apos;s hearing centers might just process speech along with other sounds. But new work suggests that speech gets some special treatment very early on. Read more at QuantaMagazine.org. Music is &quot;Thought Bot&quot; by Audionautix.</itunes:summary>
+            <itunes:image href="https://d2r55xnwy6nx47.cloudfront.net/uploads/2021/10/speechsound_300.jpg" />
+            <itunes:duration>1166</itunes:duration>
+            <itunes:author>Quanta Magazine</itunes:author>
+            <comments>https://www.quantamagazine.org/the-brain-processes-speech-in-parallel-with-other-sounds-20211021/#respond</comments>
+            <wfw:commentRss>https://www.quantamagazine.org/the-brain-processes-speech-in-parallel-with-other-sounds-20211021/feed/</wfw:commentRss>
+            <slash:comments>0</slash:comments>
+            <category>Biology</category>
+            <content:encoded><![CDATA[Scientists thought that the brain’s hearing centers might just process speech along with other sounds. But new work suggests that speech gets some special treatment very early on.            <p>The post <a href="https://www.quantamagazine.org/the-brain-processes-speech-in-parallel-with-other-sounds-20211021/" target="_blank">The Brain Processes Speech in Parallel With Other Sounds</a> first appeared on <a href="https://api.quantamagazine.org" target="_blank">Quanta Magazine</a></p>]]></content:encoded>
+            <itunes:explicit>no</itunes:explicit>
+        </item>
+        <item>
+            <title>Biologists Rethink the Logic Behind Cells’ Molecular Signals</title>
+            <link>https://www.quantamagazine.org/biologists-rethink-the-logic-behind-cells-molecular-signals-20210916/</link>
+            <pubDate>Thu, 23 Dec 2021 12:00:00 +0000</pubDate>
+            <guid isPermaLink="false">https://www.quantamagazine.org/?p=108670</guid>
+            <description><![CDATA[The molecular signaling systems of complex cells are nothing like simple electronic circuits. The logic governing their operation is riotously complex — but it has advantages.            <p>The post <a href="https://www.quantamagazine.org/biologists-rethink-the-logic-behind-cells-molecular-signals-20210916/" target="_blank">Biologists Rethink the Logic Behind Cells’ Molecular Signals</a> first appeared on <a href="https://api.quantamagazine.org" target="_blank">Quanta Magazine</a></p>]]></description>
+            <enclosure url="https://chrt.fm/track/C9B4G7//media.blubrry.com/quanta/d2r55xnwy6nx47.cloudfront.net/uploads/2021/12/Quanta-178_Logic-Cells_FINAL.mp3" length="35819126" type="audio/mpeg" />
+            <itunes:title>Biologists Rethink the Logic Behind Cells’ Molecular Signals</itunes:title>
+            <itunes:subtitle>The molecular signaling systems of complex cells are nothing like simple electronic circuits. The logic governing their operation is riotously complex - but it has advantages.</itunes:subtitle>
+            <itunes:summary>The molecular signaling systems of complex cells are nothing like simple electronic circuits. The logic governing their operation is riotously complex - but it has advantages. Read more at QuantaMagazine.org. Music is &quot;Unanswered Questions&quot; by Kevin MacLeod.</itunes:summary>
+            <itunes:image href="https://d2r55xnwy6nx47.cloudfront.net/uploads/2021/09/Cell_300.jpg" />
+            <itunes:duration>1492</itunes:duration>
+            <itunes:author>Quanta Magazine</itunes:author>
+            <comments>https://www.quantamagazine.org/biologists-rethink-the-logic-behind-cells-molecular-signals-20210916/#respond</comments>
+            <wfw:commentRss>https://www.quantamagazine.org/biologists-rethink-the-logic-behind-cells-molecular-signals-20210916/feed/</wfw:commentRss>
+            <slash:comments>0</slash:comments>
+            <category>Biology</category>
+            <content:encoded><![CDATA[The molecular signaling systems of complex cells are nothing like simple electronic circuits. The logic governing their operation is riotously complex — but it has advantages.            <p>The post <a href="https://www.quantamagazine.org/biologists-rethink-the-logic-behind-cells-molecular-signals-20210916/" target="_blank">Biologists Rethink the Logic Behind Cells’ Molecular Signals</a> first appeared on <a href="https://api.quantamagazine.org" target="_blank">Quanta Magazine</a></p>]]></content:encoded>
+            <itunes:explicit>no</itunes:explicit>
+        </item>
+    </channel>
+</rss>
