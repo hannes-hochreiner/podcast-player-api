@@ -2,7 +2,7 @@ use crate::{fetcher::request, repo::Repo, rss_feed::RssFeed};
 use anyhow::Result;
 use chrono::Utc;
 use hyper::{Body, Method, Response};
-use log::{error, info, warn};
+use log::{error, info, trace, warn};
 use podcast_player_common::{FeedUrl, FeedVal};
 use tokio::time::{sleep, Duration};
 use uuid::Uuid;
@@ -32,6 +32,8 @@ impl Updater {
     }
 
     async fn process_feeds(&self) -> Result<()> {
+        trace!("processing feeds");
+
         let repo = match Repo::new(&self.connection).await {
             Ok(rep) => Ok(rep),
             Err(e) => {
@@ -41,10 +43,17 @@ impl Updater {
             }
         }?;
 
+        trace!("created repo");
+
         let feeds = repo.get_objects::<FeedVal>(None).await?;
+
+        trace!("got {} feeds", feeds.len());
 
         for feed in feeds {
             let title = feed.title.clone();
+
+            trace!("processing feed \"{}\"", title);
+
             match process_feed(&feed, &repo).await {
                 Ok(_) => info!("successfully parsed \"{}\"", title),
                 Err(e) => error!("error parsing \"{}\": {}", title, e),
@@ -56,7 +65,11 @@ impl Updater {
 }
 
 async fn process_feed(db_feed: &FeedVal, repo: &Repo) -> Result<()> {
+    trace!("processing feed {:?}", db_feed);
+
     let res = get_feed_response(db_feed, repo).await?;
+
+    trace!("got feed response");
 
     // Concatenate the body stream into a single buffer...
     let buf = hyper::body::to_bytes(res).await?;
@@ -125,7 +138,11 @@ async fn process_feed(db_feed: &FeedVal, repo: &Repo) -> Result<()> {
 }
 
 async fn get_feed_response(db_feed: &FeedVal, repo: &Repo) -> Result<Response<Body>> {
+    trace!("getting feed urls by feed id");
+
     let mut feed_urls = repo.get_urls_by_feed_id(&db_feed.id).await?;
+
+    trace!("got feed urls {:?}", feed_urls);
 
     feed_urls.sort();
 
